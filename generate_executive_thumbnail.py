@@ -710,7 +710,20 @@ def create_post_thumbnail(title, summary="", keyword="", custom_image_url="", ap
     7. Trả về link CDN vĩnh viễn WebP siêu tốc
     """
     if not repo_full_name:
-        repo_full_name = os.environ.get("GITHUB_REPOSITORY", "").strip() or "owner/blogger-auto-cloud"
+        repo_full_name = os.environ.get("GITHUB_REPOSITORY", "").strip()
+        if not repo_full_name:
+            try:
+                import subprocess
+                out = subprocess.check_output(["git", "config", "--get", "remote.origin.url"], text=True).strip()
+                if "github.com" in out:
+                    part = out.split("github.com")[-1].lstrip("/:").rstrip(".git")
+                    if "/" in part:
+                        repo_full_name = part
+            except Exception:
+                pass
+        if not repo_full_name:
+            repo_full_name = "luvietceo/blogger-auto-poster"
+
     clean_slug = slugify(title, keyword=keyword)
     thumb_dir = os.path.join(os.path.dirname(__file__), "thumbnails")
     os.makedirs(thumb_dir, exist_ok=True)

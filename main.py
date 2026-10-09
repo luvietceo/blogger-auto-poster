@@ -950,7 +950,7 @@ def main():
                 try:
                     custom_img = item.get('image_url', '')
                     art_title = article.get('title') or topic
-                    repo_name = os.environ.get('GITHUB_REPOSITORY', '')
+                    repo_name = os.environ.get('GITHUB_REPOSITORY', '').strip() or 'luvietceo/blogger-auto-poster'
                     thumb_url = create_post_thumbnail(
                         title=art_title,
                         summary=summary,
