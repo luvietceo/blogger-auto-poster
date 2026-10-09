@@ -56,23 +56,24 @@
 
 ---
 
-### BƯỚC 1: XÁC ĐỊNH NGÀNH NGHỀ & THÔNG TIN THƯƠNG HIỆU WEBSITE
+### BƯỚC 1: THU THẬP THÔNG TIN SHOP, WEBSITE & NGÀNH NGHỀ ĐỂ TẠO PROMPT AI ĐỘC QUYỀN
 
-**Lời thoại mẫu của Trợ lý AI:**
-> "Chào bạn! Tôi là Trợ lý Kỹ thuật đồng hành cùng bạn thiết lập cỗ máy tự động hóa viết bài Blogger Auto Cloud. Bạn không cần biết lập trình, tôi sẽ hướng dẫn bạn từng click chuột, tự làm mọi việc cấu hình và đưa lên Cloud cho bạn.
+**Lời thoại mẫu của Trợ lý AI (BẮT BUỘC HỎI ĐẦU TIÊN):**
+> "Chào bạn! Tôi là Trợ lý Kỹ thuật đồng hành cùng bạn thiết lập cỗ máy tự động hóa viết bài Blogger Auto Cloud. Bạn không cần biết lập trình, tôi sẽ hướng dẫn bạn từng click chuột, tự động làm mọi việc cấu hình và đưa lên Cloud cho bạn.
 > 
-> **Bước 1: Trước tiên, hãy cho tôi biết thông tin về website của bạn nhé:**
-> 1. Website của bạn thuộc lĩnh vực/ngành nghề gì? *(Ví dụ: Điện máy gia dụng, Bất động sản, Mỹ phẩm/Spa, Thời trang, Du lịch, Thiết kế web, Luật...)*
-> 2. Địa chỉ website chính thức của bạn là gì? *(Ví dụ: `https://mava.luviet.com/`)*
-> 3. Link Zalo tư vấn hoặc Hotline của bạn? *(Ví dụ: `https://zalo.me/0987xxxxxx`)*
-> 4. Link Fanpage Facebook của bạn? *(Nếu có)*
+> **🎯 BƯỚC 1: ĐẦU TIÊN, HÃY CHO TÔI BIẾT THÔNG TIN VỀ WEBSITE/SHOP CỦA BẠN ĐỂ TÔI TẠO PROMPT AI ĐỘC QUYỀN:**
+> 1. **Tên website / tên shop / thương hiệu** của bạn là gì? *(Ví dụ: Điện Máy Xanh, Bất Động Sản Hà Nội, Spa Thảo Mộc, Thời Trang Neva...)*
+> 2. **Lĩnh vực / ngành nghề kinh doanh** chính của bạn là gì? *(Ví dụ: Điện máy gia dụng, Bất động sản, Spa - Làm đẹp, Thời trang công sở, Du lịch, Thiết kế nội thất, Dịch vụ kế toán...)*
+> 3. **Địa chỉ website chính thức** hoặc link Blogspot của bạn là gì? *(Ví dụ: `https://shopcuaban.com` hoặc `https://myblog.blogspot.com`)*
+> 4. **Thông tin liên hệ & kênh chốt khách (Zalo / Hotline)** của bạn là gì? *(Ví dụ: `https://zalo.me/0987xxxxxx` hoặc Hotline: `0987.xxx.xxx`)*
 > 
-> Bạn chỉ cần trả lời ngắn gọn, tôi sẽ tự động thiết lập phong cách viết bài và gắn nút liên hệ phù hợp nhất cho bạn!"
+> Bạn chỉ cần gõ câu trả lời ngắn gọn. Ngay khi có thông tin, tôi sẽ tự động 'may đo' cấu trúc Prompt AI chuyên sâu trong `main.py` để bot đóng vai đúng chuyên gia đầu ngành của bạn và dẫn link chuyển đổi về chính shop của bạn!"
 
 **Hành động của AI sau khi nhận phản hồi:**
-* Ghi nhớ ngành nghề, URL website, Zalo, Fanpage.
-* Chuẩn bị thông tin để cập nhật vào `main.py` và `.env` ở Bước 7.
-* Chuyển sang Bước 2.
+* Ghi nhớ 4 thông số cốt lõi: `BRAND_NAME`, `WEBSITE_NICHE`, `WEBSITE_URL`, `CTA_URL` (Zalo/Hotline).
+* May đo Prompt AI và thiết lập sẵn vào file `.env` và `main.py`.
+* Báo cáo cho người dùng: *"✨ Đã may đo thành công Prompt AI cho thương hiệu [Tên Shop] trong ngành [Ngành nghề]!"*
+* Chuyển sang Bước 2 (Lấy Blogger Blog ID).
 
 ---
 

@@ -70,36 +70,39 @@ def save_env_file(config):
 # Tạo tự động bởi Setup Wizard vào: {time.strftime('%Y-%m-%d %H:%M:%S')}
 # ==============================================================================
 
-# 1. Google Gemini AI API Key (Lấy miễn phí tại: https://aistudio.google.com/app/apikey)
+# 1. Thông tin thương hiệu, lĩnh vực & kênh chuyển đổi (Custom Prompt Engine)
+BRAND_NAME={config.get('BRAND_NAME', '')}
+WEBSITE_NICHE={config.get('WEBSITE_NICHE', '')}
+WEBSITE_URL={config.get('WEBSITE_URL', '')}
+ZALO_URL={config.get('ZALO_URL', '')}
+HOTLINE={config.get('HOTLINE', '')}
+FANPAGE_URL={config.get('FANPAGE_URL', '')}
+CTA_URL={config.get('CTA_URL', config.get('ZALO_URL', ''))}
+REGISTER_URL={config.get('REGISTER_URL', config.get('CTA_URL', ''))}
+
+# 2. Google Gemini AI API Key (Lấy miễn phí tại: https://aistudio.google.com/app/apikey)
 GEMINI_API_KEY={config.get('GEMINI_API_KEY', '')}
 GEMINI_API_KEYS={config.get('GEMINI_API_KEYS', '')}
 
-# 2. ID Blog trên Blogger (Dãy số trên URL quản trị: https://www.blogger.com/blog/posts/XXXXX)
+# 3. ID Blog trên Blogger (Dãy số trên URL quản trị: https://www.blogger.com/blog/posts/XXXXX)
 BLOGGER_BLOG_ID={config.get('BLOGGER_BLOG_ID', '')}
 
-# 3. Google Cloud OAuth 2.0 Credentials (Tạo tại: https://console.cloud.google.com/apis/credentials)
+# 4. Google Cloud OAuth 2.0 Credentials (Tạo tại: https://console.cloud.google.com/apis/credentials)
 GOOGLE_CLIENT_ID={config.get('GOOGLE_CLIENT_ID', '')}
 GOOGLE_CLIENT_SECRET={config.get('GOOGLE_CLIENT_SECRET', '')}
 GOOGLE_REFRESH_TOKEN={config.get('GOOGLE_REFRESH_TOKEN', '')}
 
-# 4. Chế độ phát hành: 'schedule' (Lên lịch giờ vàng) | 'publish' (Đăng ngay) | 'draft' (Lưu nháp)
+# 5. Chế độ phát hành: 'schedule' (Lên lịch giờ vàng) | 'publish' (Đăng ngay) | 'draft' (Lưu nháp)
 POST_MODE={config.get('POST_MODE', 'schedule')}
 SCHEDULE_HOURS_AHEAD={config.get('SCHEDULE_HOURS_AHEAD', '24')}
 
-# 5. Thông báo Telegram báo cáo tức thì (Tùy chọn)
+# 6. Thông báo Telegram báo cáo tức thì (Tùy chọn)
 TELEGRAM_BOT_TOKEN={config.get('TELEGRAM_BOT_TOKEN', '')}
 TELEGRAM_CHAT_ID={config.get('TELEGRAM_CHAT_ID', '')}
 
-# 6. Đồng bộ đề tài Google Sheets & Webhook báo cáo (Tùy chọn)
+# 7. Đồng bộ đề tài Google Sheets & Webhook báo cáo (Tùy chọn)
 GOOGLE_SHEET_URL={config.get('GOOGLE_SHEET_URL', '')}
 GOOGLE_SHEET_WEBHOOK_URL={config.get('GOOGLE_SHEET_WEBHOOK_URL', '')}
-
-# 7. Thông tin thương hiệu & Link Kêu Gọi Hành Động (CTA)
-CTA_URL={config.get('CTA_URL', 'https://zalo.me/')}
-WEBSITE_URL={config.get('WEBSITE_URL', '')}
-REGISTER_URL={config.get('REGISTER_URL', '')}
-ZALO_URL={config.get('ZALO_URL', '')}
-FANPAGE_URL={config.get('FANPAGE_URL', '')}
 """
     with open(ENV_FILE, 'w', encoding='utf-8') as f:
         f.write(content)
@@ -206,9 +209,55 @@ def interactive_wizard():
 
     cfg = load_current_env()
 
-    # BƯỚC 1: GEMINI API KEY
+    # BƯỚC 1: THÔNG TIN SHOP, WEBSITE & NGÀNH NGHỀ (TẠO PROMPT AI ĐỘC QUYỀN)
     print("-" * 72)
-    print("📌 BƯỚC 1: KHÓA GOOGLE GEMINI AI API KEY (Miễn phí)")
+    print("📌 BƯỚC 1: THÔNG TIN SHOP, WEBSITE & NGÀNH NGHỀ (TẠO PROMPT AI)")
+    print("-" * 72)
+    print("AI sẽ dùng các thông tin này để 'may đo' phong cách viết bài chuẩn SEO & CRO,")
+    print("đóng vai chuyên gia đúng ngành và chèn link chuyển đổi về chính shop của bạn.\n")
+
+    current_brand = cfg.get('BRAND_NAME', '')
+    print(f"1. Tên website / shop / thương hiệu: {current_brand or '(Chưa có)'}")
+    nhap_brand = input("   Nhập tên thương hiệu (VD: Điện Máy Xanh, Đất Vàng Land, Spa Thảo Mộc...): ").strip()
+    if nhap_brand:
+        cfg['BRAND_NAME'] = nhap_brand
+
+    current_niche = cfg.get('WEBSITE_NICHE', '')
+    print(f"\n2. Lĩnh vực / ngành nghề chính: {current_niche or '(Chưa có)'}")
+    nhap_niche = input("   Nhập ngành nghề (VD: Điện máy gia dụng, Bất động sản, Spa - Làm đẹp, Thời trang...): ").strip()
+    if nhap_niche:
+        cfg['WEBSITE_NICHE'] = nhap_niche
+
+    current_url = cfg.get('WEBSITE_URL', '')
+    print(f"\n3. Link website / blog chính thức: {current_url or '(Chưa có)'}")
+    nhap_url = input("   Nhập link website (VD: https://shopcuaban.com hoặc link blogspot): ").strip()
+    if nhap_url:
+        cfg['WEBSITE_URL'] = nhap_url
+
+    current_zalo = cfg.get('ZALO_URL', cfg.get('CTA_URL', ''))
+    print(f"\n4. Kênh tư vấn Zalo / Hotline chốt khách: {current_zalo or '(Chưa có)'}")
+    nhap_zalo = input("   Nhập link Zalo hoặc SĐT tư vấn (VD: https://zalo.me/0987xxxxxx): ").strip()
+    if nhap_zalo:
+        if not nhap_zalo.startswith('http') and nhap_zalo.replace('.', '').replace(' ', '').isdigit():
+            nhap_zalo = f"https://zalo.me/{nhap_zalo.replace('.', '').replace(' ', '')}"
+        cfg['ZALO_URL'] = nhap_zalo
+        cfg['CTA_URL'] = nhap_zalo
+        cfg['REGISTER_URL'] = nhap_zalo
+
+    current_hotline = cfg.get('HOTLINE', '')
+    nhap_hotline = input(f"\n5. Hotline tư vấn nhanh (Enter để bỏ qua) [{current_hotline}]: ").strip()
+    if nhap_hotline:
+        cfg['HOTLINE'] = nhap_hotline
+
+    print(f"\n✨ ĐÃ MAY ĐO XONG PROMPT AI ĐỘC QUYỀN:")
+    print(f"   🏢 Ngành nghề: [{cfg.get('WEBSITE_NICHE', 'Chuyên gia tư vấn')}]")
+    print(f"   🏷️ Thương hiệu: [{cfg.get('BRAND_NAME', 'Website')}]")
+    print(f"   🌐 Website:    [{cfg.get('WEBSITE_URL', 'Chưa có')}]")
+    print(f"   💬 Kênh chốt:  [{cfg.get('CTA_URL', 'Chưa có')}]")
+
+    # BƯỚC 2: GEMINI API KEY
+    print("\n" + "-" * 72)
+    print("📌 BƯỚC 2: KHÓA GOOGLE GEMINI AI API KEY (Miễn phí)")
     print("-" * 72)
     print("Gemini AI sẽ là 'bộ não' tự động viết nội dung chuẩn SEO 1500+ từ.")
     print("👉 Lấy khóa miễn phí tại: https://aistudio.google.com/app/apikey")
@@ -229,9 +278,9 @@ def interactive_wizard():
             print(f"⚠️ Cảnh báo: {msg}")
             print("Bạn vẫn có thể tiếp tục và kiểm tra lại key sau.")
 
-    # BƯỚC 2: BLOGGER BLOG ID
+    # BƯỚC 3: BLOGGER BLOG ID
     print("\n" + "-" * 72)
-    print("📌 BƯỚC 2: BLOGGER BLOG ID")
+    print("📌 BƯỚC 3: BLOGGER BLOG ID")
     print("-" * 72)
     print("Mã số định danh trang Blogger của bạn.")
     print("👉 Cách lấy: Mở blogger.com -> Nhìn lên thanh URL trình duyệt web:")
@@ -245,9 +294,9 @@ def interactive_wizard():
         cfg['BLOGGER_BLOG_ID'] = re.sub(r'[^0-9]', '', nhap_blog_id)
         print(f"✅ Đã ghi nhận Blog ID: {cfg['BLOGGER_BLOG_ID']}")
 
-    # BƯỚC 3: GOOGLE OAUTH CLIENT ID & CLIENT SECRET
+    # BƯỚC 4: GOOGLE OAUTH CLIENT ID & CLIENT SECRET
     print("\n" + "-" * 72)
-    print("📌 BƯỚC 3: GOOGLE CLOUD OAUTH (CLIENT ID & CLIENT SECRET)")
+    print("📌 BƯỚC 4: GOOGLE CLOUD OAUTH (CLIENT ID & CLIENT SECRET)")
     print("-" * 72)
     print("Cấp quyền cho robot thay mặt bạn đăng bài lên Blogger.")
     print("👉 Tạo tại: https://console.cloud.google.com/apis/credentials")
@@ -266,9 +315,9 @@ def interactive_wizard():
     if nhap_sec:
         cfg['GOOGLE_CLIENT_SECRET'] = nhap_sec
 
-    # BƯỚC 4: TỰ ĐỘNG LẤY GOOGLE REFRESH TOKEN
+    # BƯỚC 5: TỰ ĐỘNG LẤY GOOGLE REFRESH TOKEN
     print("\n" + "-" * 72)
-    print("📌 BƯỚC 4: GOOGLE REFRESH TOKEN (ỦY QUYỀN ĐĂNG BÀI)")
+    print("📌 BƯỚC 5: GOOGLE REFRESH TOKEN (ỦY QUYỀN ĐĂNG BÀI)")
     print("-" * 72)
     current_rf = cfg.get('GOOGLE_REFRESH_TOKEN', '')
     print(f"Refresh Token hiện tại: {mask_secret(current_rf, 6)}")
@@ -291,11 +340,11 @@ def interactive_wizard():
                     print(f"⚠️ Quá trình mở OAuth gặp sự cố: {e}")
                     print("Bạn có thể nhập thủ công hoặc chạy lại sau bằng file: LAY_REFRESH_TOKEN.bat")
         else:
-            print("⚠️ Cần có Client ID và Client Secret ở Bước 3 trước khi lấy Refresh Token.")
+            print("⚠️ Cần có Client ID và Client Secret ở Bước 4 trước khi lấy Refresh Token.")
 
-    # BƯỚC 5: CẤU HÌNH PHÁT HÀNH BÀI VIẾT
+    # BƯỚC 6: CẤU HÌNH PHÁT HÀNH BÀI VIẾT
     print("\n" + "-" * 72)
-    print("📌 BƯỚC 5: CHẾ ĐỘ PHÁT HÀNH BÀI VIẾT")
+    print("📌 BƯỚC 6: CHẾ ĐỘ PHÁT HÀNH BÀI VIẾT")
     print("-" * 72)
     print("Chọn cách hệ thống xử lý khi viết bài xong:")
     print("  [1] schedule : Lên lịch hẹn giờ tự động vào các Khung Giờ Vàng (Khuyên dùng)")
@@ -312,9 +361,9 @@ def interactive_wizard():
     elif mode_input == '3':
         cfg['POST_MODE'] = 'draft'
 
-    # BƯỚC 6: THÔNG BÁO TELEGRAM (TÙY CHỌN)
+    # BƯỚC 7: THÔNG BÁO TELEGRAM (TÙY CHỌN)
     print("\n" + "-" * 72)
-    print("📌 BƯỚC 6: BÁO CÁO QUA TELEGRAM (Tùy chọn - Có thể bỏ qua)")
+    print("📌 BƯỚC 7: BÁO CÁO QUA TELEGRAM (Tùy chọn - Có thể bỏ qua)")
     print("-" * 72)
     print("Nhận thông báo bài đăng và link trực tiếp về điện thoại.")
     current_tg_token = cfg.get('TELEGRAM_BOT_TOKEN', '')
@@ -331,9 +380,9 @@ def interactive_wizard():
         if nhap_tg_chat:
             cfg['TELEGRAM_CHAT_ID'] = nhap_tg_chat
 
-    # BƯỚC 7: CẤU HÌNH ĐỀ TÀI GOOGLE SHEETS (TÙY CHỌN)
+    # BƯỚC 8: CẤU HÌNH ĐỀ TÀI GOOGLE SHEETS (TÙY CHỌN)
     print("\n" + "-" * 72)
-    print("📌 BƯỚC 7: QUẢN LÝ ĐỀ TÀI QUA GOOGLE SHEETS (Tùy chọn)")
+    print("📌 BƯỚC 8: QUẢN LÝ ĐỀ TÀI QUA GOOGLE SHEETS (Tùy chọn)")
     print("-" * 72)
     print("🌟 Link template mẫu chuẩn cho người mới (1-Click tạo bản sao):")
     print("👉 https://docs.google.com/spreadsheets/d/1VTsUaq33Wt-YBekNBUGS7pphOsJ7W4-ai5zwy9WEnkY/copy")
@@ -346,7 +395,7 @@ def interactive_wizard():
     # LƯU FILE .ENV
     save_env_file(cfg)
 
-    # BƯỚC 8: KIỂM TRA CHẨN ĐOÁN TOÀN DIỆN
+    # BƯỚC 9: KIỂM TRA CHẨN ĐOÁN TOÀN DIỆN
     print("\n" + "=" * 72)
     print("🔍 ĐANG KIỂM TRA KẾT NỐI TOÀN DIỆN HỆ THỐNG...")
     print("=" * 72)

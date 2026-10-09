@@ -11,9 +11,9 @@
 
 Xin chào Trợ lý AI! Tôi muốn cài đặt hệ thống Blogger Auto Cloud cho website của mình.
 Tôi không rành kỹ thuật. Hãy đọc file QUY_TRINH_TRO_LY_AI.md và hướng dẫn tôi theo đúng nguyên tắc "cầm tay chỉ việc, 1 bước 1 câu hỏi":
-1. Đầu tiên hãy hỏi tôi về website của tôi (ngành nghề, tên miền web, Zalo/Hotline liên hệ).
-2. Sau đó hướng dẫn tôi lấy từng thông số một (Blogger ID, Gemini API Key, Google Sheet, Google Cloud OAuth).
-3. Bạn tự động tạo file .env, tự động cập nhật prompt và thông tin thương hiệu trong main.py theo đúng ngành nghề của tôi.
+1. Đầu tiên ở Bước 1, hãy yêu cầu tôi nhập: Tên shop / website thương hiệu, Ngành nghề kinh doanh, Link website và Kênh liên hệ (Zalo/Hotline) để bạn tạo ngay cấu trúc Prompt AI chuẩn may đo riêng cho shop của tôi.
+2. Sau đó lần lượt hướng dẫn tôi lấy từng thông số kỹ thuật (Blogger ID, Gemini API Key, Google Cloud OAuth).
+3. Bạn tự động tạo file .env, tự động thiết lập prompt và thông tin thương hiệu trong main.py theo đúng ngành nghề của tôi.
 4. Bạn tự chạy script lấy Refresh Token, kiểm tra kết nối và xuất bản thử nghiệm 1 bài viết lên Blogger cho tôi.
 5. Cuối cùng bạn hỗ trợ tôi đẩy lên GitHub Actions để bot tự chạy 24/7 hoàn toàn miễn phí trọn đời.
 Bây giờ hãy bắt đầu ngay với Bước 1 nhé!

@@ -69,10 +69,10 @@ Bây giờ hãy bắt đầu ngay với Bước 1 nhé!
 
 Sau khi bạn gửi câu lệnh trên, Trợ lý AI sẽ kích hoạt chế độ **Co-Pilot Turn-by-Turn (Hỏi 1 việc - Bạn trả lời 1 việc)**:
 
-### 🔹 BƯỚC 1: AI HỎI VỀ WEBSITE & NGÀNH NGHỀ CỦA BẠN
-* **AI sẽ hỏi:** *"Chào bạn! Trước tiên, hãy cho tôi biết website của bạn thuộc ngành nghề gì (Điện máy, BĐS, Mỹ phẩm, Du lịch...), tên miền web và số Zalo/Hotline liên hệ nhé!"*
-* **Việc bạn làm:** Gõ câu trả lời ngắn gọn (Ví dụ: *"Web mình bán điện máy mava.luviet.com, zalo 0987xxx"*).
-* **AI làm thay bạn:** AI ghi nhận và chuẩn bị sẵn cấu hình, thiết lập phong cách viết bài chuyên gia cho ngành nghề đó.
+### 🔹 BƯỚC 1: AI YÊU CẦU NHẬP TÊN SHOP, NGÀNH NGHỀ & LIÊN HỆ ĐỂ TẠO PROMPT
+* **AI sẽ hỏi:** *"Chào bạn! Trước tiên, hãy cho tôi biết: 1. Tên shop/thương hiệu của bạn là gì? 2. Ngành nghề kinh doanh chính là gì? 3. Link website/blog là gì? 4. Kênh liên hệ (Zalo/Hotline) của bạn là gì để tôi tạo cấu trúc Prompt AI độc quyền cho bạn nhé!"*
+* **Việc bạn làm:** Gõ câu trả lời ngắn gọn (Ví dụ: *"Shop mình là Đất Vàng Land, ngành bất động sản, web https://datvangland.com, Zalo 0987xxxxxx, Hotline 0987.xxx.xxx"*).
+* **AI làm thay bạn:** AI ghi nhận và lập tức "may đo" riêng cấu trúc Prompt AI chuyên sâu trong `main.py` và `.env`, đóng vai đúng chuyên gia đầu ngành đó và chèn nút chuyển đổi về chính shop của bạn!
 
 ### 🔹 BƯỚC 2: AI HỎI BLOGGER BLOG ID & URL
 * **AI sẽ nói:** *"Bước 2, bạn mở Blogger.com lên, chọn Blog của mình rồi nhìn lên thanh địa chỉ xem dãy số cuối cùng..."*

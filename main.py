@@ -161,8 +161,9 @@ BRAND_NAME = os.environ.get('BRAND_NAME', os.environ.get('WEBSITE_NAME', '')).st
 WEBSITE_NICHE = os.environ.get('WEBSITE_NICHE', os.environ.get('NICHE', '')).strip()
 
 ZALO_URL = os.environ.get('ZALO_URL', '').strip()
+HOTLINE = os.environ.get('HOTLINE', '').strip()
 FANPAGE_URL = os.environ.get('FANPAGE_URL', '').strip()
-CTA_URL = os.environ.get('CTA_URL', ZALO_URL or FANPAGE_URL or WEBSITE_URL).strip()
+CTA_URL = os.environ.get('CTA_URL', ZALO_URL or (f"tel:{HOTLINE}" if HOTLINE else '') or FANPAGE_URL or WEBSITE_URL).strip()
 REGISTER_URL = os.environ.get('REGISTER_URL', CTA_URL).strip()
 
 TOPICS_FILE = os.path.join(os.path.dirname(__file__), 'topics.txt')
@@ -310,6 +311,9 @@ def generate_seo_article(topic, labels, summary='', cta_url=None):
 
     cta_site_btn = f"""<a href="{target_site}" target="_blank" rel="noopener" style="background: #1e293b; color: #ffffff; font-weight: 600; font-size: 15px; padding: 13px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25); display: inline-block;">🏠 Khám Phá Thêm Tại {effective_brand}</a>""" if target_site != "#" else ""
 
+    hotline_info = f" (Hotline/Zalo: {HOTLINE})" if HOTLINE else ""
+    hotline_btn = f"""<a href="tel:{HOTLINE}" rel="noopener" style="background: #dc2626; color: #ffffff; font-weight: 600; font-size: 15px; padding: 13px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25); display: inline-block;">📞 Hotline: {HOTLINE}</a>""" if HOTLINE else ""
+
     prompt = f"""
 Bạn là Chuyên gia Cố vấn Cấp cao, Cây bút Chuyên sâu & Review Thực chiến hàng đầu trong lĩnh vực {niche_title}.
 Hãy tạo một bài viết chuẩn SEO chuyên sâu, cấu trúc chặt chẽ, khách quan, giàu trải nghiệm thực tế và tối ưu tỷ lệ chuyển đổi (CRO) bằng tiếng Việt cho thương hiệu "{effective_brand}" ({target_site}) theo các thông số sau:
@@ -348,9 +352,10 @@ CHIẾN LƯỢC NỘI DUNG CHUẨN SEO & CHUYỂN ĐỔI CAO (QUAN TRỌNG NHẤ
      <div style="margin: 35px 0 20px; padding: 28px 24px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #fef3c7 100%); border: 2px solid #0284c7; border-radius: 14px; text-align: center; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.15);">
        <span style="background: #0284c7; color: #ffffff; font-size: 13px; font-weight: 600; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; letter-spacing: 0.5px;">Tư Vấn Chuyên Sâu & Báo Giá Tốt Nhất</span>
        <h3 style="color: #0369a1; margin: 15px 0 10px; font-size: 22px; font-weight: 700; line-height: 1.4;">⚡ Cần Hỗ Trợ & Tư Vấn Giải Pháp Tối Ưu Cho "{topic}"?</h3>
-       <p style="color: #334155; font-size: 15px; line-height: 1.6; max-width: 1280px; margin: 0 auto 22px;">Đừng ngần ngại liên hệ ngay với đội ngũ chuyên môn của {effective_brand} để được tư vấn chính xác, so sánh các phương án tối ưu ngân sách và nhận chính sách hỗ trợ ưu đãi tốt nhất ngay hôm nay!</p>
+       <p style="color: #334155; font-size: 15px; line-height: 1.6; max-width: 1280px; margin: 0 auto 22px;">Đừng ngần ngại liên hệ ngay với đội ngũ chuyên môn của {effective_brand}{hotline_info} để được tư vấn chính xác, so sánh các phương án tối ưu ngân sách và nhận chính sách hỗ trợ ưu đãi tốt nhất ngay hôm nay!</p>
        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
          <a href="{effective_cta}" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-weight: 600; font-size: 16px; padding: 13px 30px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); display: inline-block;">💬 Chat Zalo Nhận Báo Giá Ưu Đãi & Tư Vấn Kỹ Thuật</a>
+         {hotline_btn}
          {cta_site_btn}
        </div>
      </div>

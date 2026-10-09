@@ -76,8 +76,8 @@ Bây giờ hãy bắt đầu ngay với Bước 1 nhé!
 ```
 
 ### 👉 Bước 3: Trải nghiệm thực tế - AI sẽ làm thay bạn như thế nào?
-* **AI hỏi ngành nghề & thông tin:** Bạn chỉ cần nói *"Web tôi bán điện máy gia dụng, link mava.luviet.com, zalo 0987..."* hoặc *"Web tôi làm bất động sản..."*.
-  ➔ **AI sẽ tự động:** Tinh chỉnh Prompt chuyên gia trong `main.py`, tạo khối CTA chuẩn màu sắc và thương hiệu của bạn!
+* **AI hỏi tên shop, ngành nghề & kênh liên hệ để tạo Prompt:** Bạn chỉ cần nói *"Shop tôi là Đất Vàng Land, ngành bất động sản, web datvangland.com, Zalo 0987..."* hoặc *"Shop tôi là Điện Máy ABC..."*.
+  ➔ **AI sẽ tự động:** 'May đo' cấu trúc Prompt chuyên gia trong `main.py`, tạo khối CTA chuẩn màu sắc và thông tin thương hiệu của bạn!
 * **AI hướng dẫn lấy ID & Key:** Mỗi lượt chat AI chỉ gửi 1 link duy nhất và chỉ rõ bấm vào đâu. Bạn gửi mã nào AI nhận mã đó.
 * **AI kích hoạt lấy Token:** AI tự chạy lệnh, trình duyệt của bạn tự bật lên ➔ Bạn chỉ việc bấm **Cho phép (Allow)**.
 * **AI tự tạo file `.env` & Chạy test:** AI tự ghi file cấu hình, tự gọi Gemini viết bài mẫu, tự động bọc thẻ `[tintuc]` và gửi link bài viết Blogger vừa đăng thành công ngay trong khung chat cho bạn xem!
@@ -93,7 +93,7 @@ Bây giờ hãy bắt đầu ngay với Bước 1 nhé!
 
 #### 1.1. Tạo Blog mới (Nếu chưa có)
 1. Truy cập [blogger.com](https://www.blogger.com) và đăng nhập bằng Gmail của bạn.
-2. Bấm **Tạo blog (Create Blog)** ➔ Đặt tiêu đề và chọn URL (ví dụ: `dienmay-mava.blogspot.com`).
+2. Bấm **Tạo blog (Create Blog)** ➔ Đặt tiêu đề và chọn URL (ví dụ: `shop-cuaban.blogspot.com`).
 
 #### 1.2. 2 Cài đặt SEO sống còn trên Blogger
 1. **Bật Thẻ Meta Mô Tả Tìm Kiếm (Search Description):**
