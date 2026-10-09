@@ -1,6 +1,6 @@
 /**
  * Google Apps Script Webhook - Tự động cập nhật Google Sheets & Gửi thông báo Email + Telegram
- * Tương thích 100% với Hệ thống Blogger Auto Cloud Điện Máy & Gia Dụng (mava.luviet.com)
+ * Tương thích 100% với Hệ thống Blogger Auto Cloud Đa Ngành Chuẩn SEO
  * 
  * ==============================================================================
  * CẤU HÌNH THÔNG BÁO TELEGRAM & EMAIL
@@ -182,7 +182,7 @@ function sendTelegramMessage(topic, status, postUrl, publishedTime, labels, rowI
     "⏰ <b>Thời gian:</b> " + publishedTime + "\n" +
     (rowIndex > 0 ? "📊 <b>Google Sheet:</b> Đã cập nhật dòng #" + rowIndex + " (<b>" + status + "</b>)\n" : "") +
     (postUrl ? "🔗 <b>Link bài viết:</b> <a href=\"" + postUrl + "\">Bấm xem ngay</a>\n" : "") +
-    "\n💡 <i>Hệ thống AI Blogger Cloud Siêu Thị Điện Máy & Gia Dụng (mava.luviet.com) đã xử lý hoàn tất!</i>";
+    "\n💡 <i>Hệ thống AI Blogger Auto Cloud đã xử lý và xuất bản hoàn tất!</i>";
 
   var payload = {
     chat_id: TELEGRAM_CHAT_ID,
@@ -218,16 +218,16 @@ function sendEmailNotification(topic, status, postUrl, publishedTime, labels, ro
     return;
   }
 
-  var subject = "⚡ [Điện Máy Auto-Post] Xuất bản thành công: " + topic;
+  var subject = "⚡ [Blogger Auto-Post] Xuất bản thành công: " + topic;
 
   var htmlBody =
     '<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">' +
     '<div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); padding: 24px; color: #ffffff; text-align: center;">' +
-    '<h2 style="margin: 0; font-size: 20px;">⚡ Siêu Thị Điện Máy & Gia Dụng: Báo Cáo Xuất Bản</h2>' +
-    '<p style="margin: 6px 0 0; opacity: 0.9; font-size: 14px;">Hệ thống AI Tự Động Hóa Blogger (mava.luviet.com)</p>' +
+    '<h2 style="margin: 0; font-size: 20px;">⚡ Báo Cáo Xuất Bản Bài Viết Blogger</h2>' +
+    '<p style="margin: 6px 0 0; opacity: 0.9; font-size: 14px;">Hệ thống AI Tự Động Hóa Nội Dung Chuẩn SEO</p>' +
     '</div>' +
     '<div style="padding: 24px; background: #ffffff;">' +
-    '<p style="font-size: 15px; color: #334155; line-height: 1.6;">Xin chào, hệ thống vừa xuất bản và lên lịch thành công một bài viết điện máy mới:</p>' +
+    '<p style="font-size: 15px; color: #334155; line-height: 1.6;">Xin chào, hệ thống vừa xuất bản và lên lịch thành công một bài viết mới:</p>' +
     '<div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 16px; margin: 18px 0; border-radius: 4px;">' +
     '<p style="margin: 0 0 10px; font-size: 16px; font-weight: bold; color: #0f172a;">📌 ' + topic + '</p>' +
     '<p style="margin: 6px 0; font-size: 14px; color: #334155;">🏷️ <b>Nhãn chuyên mục:</b> <span style="background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-weight: 600;">' + labels + '</span></p>' +
@@ -240,7 +240,7 @@ function sendEmailNotification(topic, status, postUrl, publishedTime, labels, ro
       '</div>' : '') +
     '</div>' +
     '<div style="background: #f1f5f9; padding: 14px; text-align: center; font-size: 12px; color: #64748b;">' +
-    'Hệ thống tự động hóa nội dung & Website Điện Máy thông minh mava.luviet.com' +
+    'Hệ thống tự động hóa nội dung & Website chuẩn SEO Blogger Auto Cloud' +
     '</div>' +
     '</div>';
 
@@ -258,9 +258,9 @@ function sendEmailNotification(topic, status, postUrl, publishedTime, labels, ro
  * ==============================================================================
  */
 function testNotification() {
-  var testTopic = "Top 5 Tủ Lạnh Inverter Tiết Kiệm Điện Bán Chạy Nhất 2026";
+  var testTopic = "Hướng Dẫn Tối Ưu Hóa Website Chuẩn SEO Và Tăng Trưởng Đột Phá 2026";
   var testStatus = "Đã lên lịch";
-  var testUrl = "https://mava.luviet.com";
+  var testUrl = "https://yourblog.blogspot.com";
   var testTime = new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
   var testLabels = "tin-tuc, tu-van-chon-mua";
 
@@ -270,5 +270,5 @@ function testNotification() {
 }
 
 function doGet(e) {
-  return ContentService.createTextOutput("✅ Blogger Google Sheets Webhook Điện Máy đang hoạt động bình thường! Tự động cập nhật 2 chiều Google Sheets & gửi thông báo.").setMimeType(ContentService.MimeType.TEXT);
+  return ContentService.createTextOutput("✅ Blogger Google Sheets Webhook đang hoạt động bình thường! Tự động cập nhật 2 chiều Google Sheets & gửi thông báo.").setMimeType(ContentService.MimeType.TEXT);
 }

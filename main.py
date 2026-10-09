@@ -88,16 +88,19 @@ SCHEDULE_HOURS_AHEAD = int(os.environ.get('SCHEDULE_HOURS_AHEAD', '24'))
 
 def determine_label(title, summary='', raw_tags=''):
     """
-    Phân loại nhãn chuẩn cho web Điện Máy & Gia Dụng:
-    - tin-tuc: Nhãn mặc định tương thích 100% với các widget của theme Blogspot
-    - tu-van-chon-mua: Đánh giá, so sánh, hướng dẫn chọn mua thiết bị
-    - meo-vat: Mẹo sử dụng, vệ sinh, bảo quản, tiết kiệm điện
+    Phân loại nhãn thông minh đa ngành tương thích 100% với widget theme Blogspot:
+    - tin-tuc: Nhãn trung tâm mặc định
+    - tu-van-chon-mua: Đánh giá, so sánh, review, bảng giá, top đề xuất
+    - huong-dan: Hướng dẫn kỹ thuật, mẹo vặt, bí quyết, cách làm, tối ưu hóa
+    - kien-thuc: Phân tích chuyên sâu, xu hướng, chiến lược, giải pháp
     """
     combined = (str(title) + ' ' + str(summary) + ' ' + str(raw_tags)).lower()
-    if any(k in combined for k in ['chọn mua', 'chon mua', 'so sánh', 'so sanh', 'đánh giá', 'danh gia', 'top', 'nên mua', 'nen mua', 'review']):
+    if any(k in combined for k in ['chọn mua', 'chon mua', 'so sánh', 'so sanh', 'đánh giá', 'danh gia', 'top', 'nên mua', 'nen mua', 'review', 'báo giá', 'bang gia', 'gia re']):
         return 'tin-tuc, tu-van-chon-mua'
-    if any(k in combined for k in ['mẹo', 'meo', 'vệ sinh', 've sinh', 'tiết kiệm điện', 'tiet kiem dien', 'cách dùng', 'cach dung', 'sửa lỗi', 'sua loi', 'hướng dẫn', 'huong dan']):
-        return 'tin-tuc, meo-vat'
+    if any(k in combined for k in ['mẹo', 'meo', 'vệ sinh', 've sinh', 'cách dùng', 'cach dung', 'sửa lỗi', 'sua loi', 'hướng dẫn', 'huong dan', 'bí quyết', 'bi quyet', 'quy trình', 'cac buoc']):
+        return 'tin-tuc, huong-dan'
+    if any(k in combined for k in ['kiến thức', 'kien thuc', 'tại sao', 'tai sao', 'la gi', 'là gì', 'xu hướng', 'chiến lược', 'phan tich', 'phân tích']):
+        return 'tin-tuc, kien-thuc'
     return 'tin-tuc'
 
 # Cấu hình viết hàng loạt & thời gian giãn cách (Mặc định 10 bài/ngày, phát hành 4 bài/ngày)
@@ -148,15 +151,55 @@ def get_next_schedule_slots(count=1, existing_history=None):
 
     return slots
 
-# Thông tin thương hiệu & Kênh kết nối Siêu Thị Điện Máy & Thiết Bị Gia Dụng
-WEBSITE_URL = os.environ.get('WEBSITE_URL', os.environ.get('BLOG_URL', 'https://mava.luviet.com/')).strip()
-ZALO_URL = os.environ.get('ZALO_URL', 'https://zalo.me/1501073926693571291').strip()
-FANPAGE_URL = os.environ.get('FANPAGE_URL', 'https://www.facebook.com/webluviet/').strip()
-CTA_URL = os.environ.get('CTA_URL', ZALO_URL or WEBSITE_URL).strip()
+# ==============================================================================
+# CẤU HÌNH THƯƠNG HIỆU, LĨNH VỰC & KÊNH LIÊN HỆ ĐA NĂNG (DYNAMIC & MODULAR)
+# Hệ thống tự động thích ứng với BẤT KỲ website hoặc ngành nghề nào:
+# Bất động sản, Điện máy, Thời trang, Spa/Làm đẹp, Du lịch, Công nghệ, Dịch vụ...
+# ==============================================================================
+WEBSITE_URL = os.environ.get('WEBSITE_URL', os.environ.get('BLOG_URL', '')).strip()
+BRAND_NAME = os.environ.get('BRAND_NAME', os.environ.get('WEBSITE_NAME', '')).strip()
+WEBSITE_NICHE = os.environ.get('WEBSITE_NICHE', os.environ.get('NICHE', '')).strip()
+
+ZALO_URL = os.environ.get('ZALO_URL', '').strip()
+FANPAGE_URL = os.environ.get('FANPAGE_URL', '').strip()
+CTA_URL = os.environ.get('CTA_URL', ZALO_URL or FANPAGE_URL or WEBSITE_URL).strip()
 REGISTER_URL = os.environ.get('REGISTER_URL', CTA_URL).strip()
 
 TOPICS_FILE = os.path.join(os.path.dirname(__file__), 'topics.txt')
 HISTORY_FILE = os.path.join(os.path.dirname(__file__), 'posted_history.json')
+
+def detect_niche_context(topic, summary='', labels=None):
+    """
+    Tự động nhận diện lĩnh vực chuyên môn (Niche) dựa trên tiêu đề, tóm tắt và nhãn bài viết.
+    Cho phép hệ thống thích ứng 100% với bất kỳ ngành nghề nào mà không cần cấu hình thủ công.
+    """
+    if WEBSITE_NICHE:
+        return WEBSITE_NICHE
+
+    text = f"{topic} {summary} {' '.join(labels or [])}".lower()
+
+    if any(k in text for k in ['điện máy', 'điện lạnh', 'tủ lạnh', 'máy giặt', 'điều hòa', 'máy lạnh', 'tivi', 'bếp từ', 'nồi chiên', 'lọc nước', 'lọc không khí', 'robot hút bụi', 'inverter', 'gia dụng']):
+        return "Điện Máy & Thiết Bị Gia Dụng Thông Minh"
+    elif any(k in text for k in ['bất động sản', 'nhà đất', 'căn hộ', 'chung cư', 'biệt thự', 'shophouse', 'đất nền', 'cho thuê', 'dự án', 'môi giới']):
+        return "Bất Động Sản & Đầu Tư Nhà Đất"
+    elif any(k in text for k in ['thời trang', 'quần áo', 'váy', 'giày', 'túi xách', 'phụ kiện', 'outfit', 'stylist']):
+        return "Thời Trang & Phong Cách Sống"
+    elif any(k in text for k in ['mỹ phẩm', 'làm đẹp', 'chăm sóc da', 'skincare', 'spa', 'thẩm mỹ', 'son môi', 'trị mụn']):
+        return "Làm Đẹp, Mỹ Phẩm & Chăm Sóc Sức Khỏe"
+    elif any(k in text for k in ['du lịch', 'khách sạn', 'resort', 'homestay', 'vé máy bay', 'tour', 'ẩm thực', 'nhà hàng', 'quán ăn', 'món ngon']):
+        return "Du Lịch, Khách Sạn & Ẩm Thực"
+    elif any(k in text for k in ['xe máy', 'ô tô', 'xe hơi', 'gara', 'bảo dưỡng xe', 'phụ tùng xe']):
+        return "Ô Tô, Xe Máy & Phương Tiện Giao Thông"
+    elif any(k in text for k in ['nội thất', 'kiến trúc', 'xây dựng', 'phòng khách', 'phòng ngủ', 'decor', 'thiết kế nội thất']):
+        return "Kiến Trúc & Thiết Kế Nội Thất Hiện Đại"
+    elif any(k in text for k in ['website', 'seo', 'marketing', 'quảng cáo', 'facebook ads', 'google ads', 'landing page', 'chuyển đổi số', 'thương mại điện tử', 'bán hàng online', 'tự động hóa', 'phần mềm']):
+        return "Chuyển Đổi Số, Thiết Kế Website & Marketing Online"
+    elif any(k in text for k in ['tài chính', 'bảo hiểm', 'chứng khoán', 'đầu tư', 'tiết kiệm', 'ngân hàng', 'vay vốn']):
+        return "Tài Chính, Đầu Tư & Quản Lý Dòng Tiền"
+    elif any(k in text for k in ['sức khỏe', 'y tế', 'dinh dưỡng', 'thuốc', 'phòng khám', 'bệnh', 'tập gym', 'yoga']):
+        return "Y Tế, Sức Khỏe & Chăm Sóc Đời Sống"
+
+    return "Sản Phẩm & Dịch Vụ Chuyên Nghiệp"
 
 # ==============================================================================
 # HÀM BÓC TÁCH & GIẢI MÃ JSON AN TOÀN
@@ -247,57 +290,68 @@ def robust_json_decode(raw_text):
 # ==============================================================================
 # HÀM GỌI GEMINI AI VIẾT BÀI CHUẨN SEO
 # ==============================================================================
-def generate_seo_article(topic, labels, summary='', cta_url=REGISTER_URL):
+def generate_seo_article(topic, labels, summary='', cta_url=None):
     api_keys = get_api_key_pool()
     if not api_keys:
         raise Exception("Không tìm thấy Gemini API Key nào hợp lệ!")
 
+    # Nhận diện ngành nghề và thương hiệu động
+    niche_title = detect_niche_context(topic, summary, labels)
+    effective_brand = BRAND_NAME or (WEBSITE_URL.replace('https://', '').replace('http://', '').strip('/').split('/')[0] if WEBSITE_URL else 'Chuyên Gia Tư Vấn')
+    target_site = WEBSITE_URL if WEBSITE_URL else "#"
+    effective_cta = cta_url if cta_url and cta_url.startswith('http') else (CTA_URL if CTA_URL.startswith('http') else target_site)
+
     print(f"\n🧠 Đang gọi Google Gemini AI viết bài cho chủ đề: '{topic}'...")
+    print(f"🏢 Ngành nghề nhận diện: [{niche_title}] | Thương hiệu: [{effective_brand}]")
     print(f"🔑 Số lượng API Key trong hồ chứa (Key Pool): {len(api_keys)}")
 
+    site_anchor_instruction = f"""   - Chèn thêm 1 - 2 liên kết tự nhiên đến trang chủ website:
+     Ví dụ: <a href="{target_site}" target="_blank">trang chủ {effective_brand}</a> hoặc <a href="{target_site}" target="_blank">hệ thống {effective_brand}</a>. (Tuyệt đối KHÔNG hardcode bất kỳ domain ngoài nào khác).""" if target_site != "#" else ""
+
+    cta_site_btn = f"""<a href="{target_site}" target="_blank" rel="noopener" style="background: #1e293b; color: #ffffff; font-weight: 600; font-size: 15px; padding: 13px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25); display: inline-block;">🏠 Khám Phá Thêm Tại {effective_brand}</a>""" if target_site != "#" else ""
+
     prompt = f"""
-Bạn là Chuyên gia Cố vấn Kỹ thuật, Đánh giá Chuyên sâu & Review Điện Máy, Điện Lạnh và Thiết Bị Gia Dụng Thông Minh hàng đầu Việt Nam.
-Hãy tạo một bài viết chuẩn SEO chuyên sâu, cấu trúc chặt chẽ, khách quan, giàu trải nghiệm thực tế và tối ưu tỷ lệ chuyển đổi (CRO) bằng tiếng Việt cho website Điện máy & Thiết bị Gia dụng ({WEBSITE_URL}) theo các thông số sau:
+Bạn là Chuyên gia Cố vấn Cấp cao, Cây bút Chuyên sâu & Review Thực chiến hàng đầu trong lĩnh vực {niche_title}.
+Hãy tạo một bài viết chuẩn SEO chuyên sâu, cấu trúc chặt chẽ, khách quan, giàu trải nghiệm thực tế và tối ưu tỷ lệ chuyển đổi (CRO) bằng tiếng Việt cho thương hiệu "{effective_brand}" ({target_site}) theo các thông số sau:
 
 - Chủ đề / Từ khóa chính: "{topic}"
+- Lĩnh vực chuyên môn: "{niche_title}"
 - Nhãn chuyên mục mong muốn: "{', '.join(labels)}"
 {f'- Tóm tắt gợi ý / Góc nhìn: "{summary}"' if summary else ''}
-- Kênh tư vấn & đặt hàng mục tiêu (BẮT BUỘC): "{cta_url}"
-- Website chính thức: "{WEBSITE_URL}"
+- Kênh tư vấn & đặt hàng mục tiêu (BẮT BUỘC): "{effective_cta}"
+- Website chính thức: "{target_site}"
 - Độ dài mục tiêu: Khoảng 1500 - 2000 từ.
-- Tông giọng: Chuyên gia công nghệ & điện máy thực chiến, am hiểu tường tận thông số kỹ thuật, khách quan, chân thành, ngôn từ gần gũi với gia đình Việt, tập trung vào lợi ích thiết thực (tiết kiệm điện năng, độ bền bỉ, an toàn sức khỏe, tiện nghi thông minh).
+- Tông giọng: Chuyên gia thực chiến, am hiểu tường tận thông số kỹ thuật và xu hướng thị trường, khách quan, chân thành, ngôn từ gần gũi với người Việt, tập trung giải quyết triệt để nỗi đau và mang lại lợi ích thiết thực nhất cho người đọc.
 
-CHIẾN LƯỢC NỘI DUNG CHUẨN SEO WEB ĐIỆN MÁY (QUAN TRỌNG NHẤT):
+CHIẾN LƯỢC NỘI DUNG CHUẨN SEO & CHUYỂN ĐỔI CAO (QUAN TRỌNG NHẤT):
 1. ĐỐI TƯỢNG VÀ NỖI ĐAU CỦA KHÁCH HÀNG:
-   - Đối tượng: Gia đình trẻ, chủ căn hộ/nhà phố, người nội trợ, người tiêu dùng đang tìm mua hoặc cần mẹo sử dụng các thiết bị: Tủ lạnh, Máy giặt, Điều hòa / Máy lạnh, Smart TV, Bếp từ, Nồi chiên không dầu, Máy lọc không khí, Máy lọc nước, Robot hút bụi, Thiết bị nhà bếp thông minh...
-   - Nỗi đau & Nhu cầu:
-     + Băn khoăn không biết nên chọn công suất bao nhiêu (ví dụ chọn sai công suất điều hòa, máy giặt khiến tốn điện hoặc không đủ đáp ứng).
-     + Phân vân giữa các thương hiệu lớn (Panasonic, Daikin, LG, Samsung, Toshiba, Electrolux, Sony, Philips, Sharp, Sunhouse, Kangaroo...).
-     + Nỗi lo tiền điện tăng vọt, muốn tìm sản phẩm công nghệ Inverter, nhãn năng lượng 5 sao thực sự tiết kiệm điện.
-     + Lo sợ mua phải hàng nhái, hàng lỗi trưng bày, chính sách bảo hành phức tạp.
-     + Cần hướng dẫn cách sử dụng, vệ sinh, bảo dưỡng định kỳ để máy bền đẹp 5-10 năm.
+   - Xác định chính xác đối tượng độc giả mục tiêu đang tìm kiếm hoặc gặp vấn đề về "{topic}" trong lĩnh vực {niche_title}.
+   - Nỗi đau & Nhu cầu thực tế:
+     + Băn khoăn không biết nên lựa chọn phương án/sản phẩm/công suất/giải pháp nào tối ưu nhất.
+     + Phân vân giữa các thương hiệu lớn hoặc các đơn vị cung cấp trên thị trường.
+     + Nỗi lo về chi phí, chất lượng, độ bền, tính an toàn hoặc rủi ro phát sinh khi mua/sử dụng.
+     + Cần hướng dẫn chi tiết các bước triển khai, mẹo sử dụng, bảo dưỡng, vận hành đạt hiệu quả cao nhất.
 
-2. NỘI DUNG CHUYÊN MÔN & GIẢI PHÁP:
-   - Phân tích chi tiết ưu điểm, công nghệ nổi bật (Inverter, Eco, kháng khuẩn khử mùi, tiết kiệm năng lượng, độ ồn êm ái).
-   - Đưa ra lời khuyên chọn mua thực tế dựa trên diện tích phòng, số lượng thành viên gia đình và ngân sách tài chính.
-   - BẮT BUỘC có 1 BẢNG SO SÁNH (HTML <table>) chi tiết thông số kỹ thuật / giá tham khảo / tính năng / ưu nhược điểm (border: 1px solid #cbd5e1; bo góc nhẹ, nền xen kẽ thoáng mắt).
-   - Hướng dẫn các mẹo sử dụng thực tế giúp tối ưu hóa hiệu năng và kéo dài tuổi thọ thiết bị.
+2. NỘI DUNG CHUYÊN MÔN & GIẢI PHÁP ĐỘT PHÁ:
+   - Phân tích chi tiết ưu điểm, công nghệ nổi bật, tiêu chí cốt lõi để đánh giá một giải pháp/sản phẩm tốt.
+   - Đưa ra lời khuyên chọn lựa khách quan, thực tế dựa trên điều kiện, ngân sách và nhu cầu của từng nhóm khách hàng.
+   - BẮT BUỘC có 1 BẢNG SO SÁNH (HTML <table>) chi tiết các tiêu chí kỹ thuật / giá tham khảo / tính năng / ưu nhược điểm (border: 1px solid #cbd5e1; bo góc nhẹ, nền xen kẽ thoáng mắt, font rõ ràng).
+   - Hướng dẫn các kinh nghiệm thực chiến giúp tối ưu hóa hiệu quả, tiết kiệm chi phí và phòng ngừa rủi ro.
 
 3. ĐIỀU HƯỚNG LIÊN KẾT NỘI BỘ (INTERNAL LINKING):
-   - Trong thân bài: Chèn tự nhiên 2 - 3 liên kết ngữ cảnh (contextual anchor text) dẫn người đọc bấm vào kênh tư vấn Zalo / Hotline: "{cta_url}".
-     Ví dụ: <a href="{cta_url}" target="_blank">tư vấn chọn mua điện máy chính hãng</a>, <a href="{cta_url}" target="_blank">nhận báo giá ưu đãi qua Zalo</a>, <a href="{cta_url}" target="_blank">liên hệ kỹ thuật viên hỗ trợ</a>.
-   - Chèn thêm 1 - 2 liên kết tự nhiên đến trang chủ website:
-     Ví dụ: <a href="{WEBSITE_URL}" target="_blank">siêu thị điện máy chính hãng</a> hoặc <a href="{WEBSITE_URL}" target="_blank">hệ thống điện máy mava.luviet.com</a>.
+   - Trong thân bài: Chèn tự nhiên 2 - 3 liên kết ngữ cảnh (contextual anchor text) dẫn người đọc bấm vào kênh tư vấn Zalo / Hotline: "{effective_cta}".
+     Ví dụ: <a href="{effective_cta}" target="_blank">nhận tư vấn chuyên sâu miễn phí</a>, <a href="{effective_cta}" target="_blank">nhận báo giá ưu đãi qua Zalo</a>, <a href="{effective_cta}" target="_blank">liên hệ chuyên gia hỗ trợ</a>.
+{site_anchor_instruction}
 
-4. KHỐI CALL TO ACTION (CTA) CHUYÊN NGHIỆP CHO WEB ĐIỆN MÁY:
-   - BẮT BUỘC chèn khối CTA nổi bật dạng hộp bo tròn sang trọng, phối màu nhận diện công nghệ điện máy (Xanh Dương #2563eb, Xanh Navy #1e3a8a và Cam Vàng #f59e0b):
+4. KHỐI CALL TO ACTION (CTA) CHUYÊN NGHIỆP:
+   - BẮT BUỘC chèn khối CTA nổi bật dạng hộp bo tròn sang trọng, phối màu nhận diện công nghệ & doanh nghiệp (Xanh Dương #0284c7, Navy #1e293b và Vàng Cam #f59e0b):
      <div style="margin: 35px 0 20px; padding: 28px 24px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #fef3c7 100%); border: 2px solid #0284c7; border-radius: 14px; text-align: center; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.15);">
        <span style="background: #0284c7; color: #ffffff; font-size: 13px; font-weight: 600; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; letter-spacing: 0.5px;">Tư Vấn Chuyên Sâu & Báo Giá Tốt Nhất</span>
-       <h3 style="color: #0369a1; margin: 15px 0 10px; font-size: 22px; font-weight: 700; line-height: 1.4;">⚡ Cần Tư Vấn Chọn Thiết Bị Điện Máy Phù Hợp Cho Gia Đình?</h3>
-       <p style="color: #334155; font-size: 15px; line-height: 1.6; max-width: 1280px; margin: 0 auto 22px;">Đừng ngần ngại liên hệ ngay với đội ngũ kỹ thuật viên của chúng tôi để được tư vấn công suất chuẩn xác, so sánh các model tối ưu ngân sách, cam kết 100% hàng chính hãng cùng chính sách bảo hành, lắp đặt tận nơi chuyên nghiệp!</p>
+       <h3 style="color: #0369a1; margin: 15px 0 10px; font-size: 22px; font-weight: 700; line-height: 1.4;">⚡ Cần Hỗ Trợ & Tư Vấn Giải Pháp Tối Ưu Cho "{topic}"?</h3>
+       <p style="color: #334155; font-size: 15px; line-height: 1.6; max-width: 1280px; margin: 0 auto 22px;">Đừng ngần ngại liên hệ ngay với đội ngũ chuyên môn của {effective_brand} để được tư vấn chính xác, so sánh các phương án tối ưu ngân sách và nhận chính sách hỗ trợ ưu đãi tốt nhất ngay hôm nay!</p>
        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
-         <a href="{cta_url}" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-weight: 600; font-size: 16px; padding: 13px 30px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); display: inline-block;">💬 Chat Zalo Nhận Báo Giá Ưu Đãi & Tư Vấn Kỹ Thuật</a>
-         <a href="{WEBSITE_URL}" target="_blank" rel="noopener" style="background: #1e293b; color: #ffffff; font-weight: 600; font-size: 15px; padding: 13px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25); display: inline-block;">🏠 Xem Thêm Sản Phẩm Tại Website</a>
+         <a href="{effective_cta}" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-weight: 600; font-size: 16px; padding: 13px 30px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); display: inline-block;">💬 Chat Zalo Nhận Báo Giá Ưu Đãi & Tư Vấn Kỹ Thuật</a>
+         {cta_site_btn}
        </div>
      </div>
 
@@ -305,9 +359,9 @@ CHIẾN LƯỢC NỘI DUNG CHUẨN SEO WEB ĐIỆN MÁY (QUAN TRỌNG NHẤT):
    - TIÊU ĐỀ (Title): BẮT BUỘC đặt TỪ KHÓA CHÍNH NGAY Ở ĐẦU TIÊU ĐỀ (dưới 65 ký tự) để Blogger tự động sinh URL slug chuẩn SEO mà không bị cắt cụt. Kích thích lượt click (CTR) cao.
    - SAPO: Mở bài cuốn hút 2-3 đoạn ngắn nêu bật lợi ích và lý do người dùng cần đọc bài viết này.
    - THÂN BÀI: Sử dụng thẻ <h2> và <h3> rõ ràng, logic. Luôn dùng danh sách (<ul>, <li>) để thoáng mắt.
-   - BẢNG BIỂU: BẮT BUỘC có 1 Bảng so sánh thông số kỹ thuật (HTML <table>) rõ ràng, viền mỏng (#cbd5e1).
-   - FAQ: BẮT BUỘC có mục <h2>Câu hỏi thường gặp (FAQ)</h2> với ít nhất 3 câu hỏi thực tế về cách chọn mua, bảo hành, sử dụng thiết bị điện máy và câu trả lời cặn kẽ.
-   - PROMPT TẠO ẢNH (imagePrompt): Viết 1 đoạn Prompt tiếng Anh chi tiết, chuyên nghiệp để tạo ảnh Thumbnail 16:9 chất lượng cao bám sát chủ đề thiết bị điện máy trong không gian nội thất gia đình hiện đại, sang trọng. Cấu trúc chuẩn: [Modern cinematic photorealistic product shot of household home appliances] + [Specific appliance details related to topic] + [Luxurious minimalist living room or modern kitchen background] + [Soft natural morning sunlight, 16:9 widescreen composition] + [Negative constraints: absolutely no text, no watermark, no logos, photorealistic 8k].
+   - BẢNG BIỂU: BẮT BUỘC có 1 Bảng so sánh (HTML <table>) chi tiết rõ ràng, viền mỏng (#cbd5e1).
+   - FAQ: BẮT BUỘC có mục <h2>Câu hỏi thường gặp (FAQ)</h2> với ít nhất 3 câu hỏi thực tế về chủ đề "{topic}" và câu trả lời cặn kẽ.
+   - PROMPT TẠO ẢNH (imagePrompt): Viết 1 đoạn Prompt tiếng Anh chi tiết, chuyên nghiệp để tạo ảnh Thumbnail 16:9 chất lượng cao bám sát trực tiếp chủ đề "{topic}" trong bối cảnh ngành {niche_title}. Cấu trúc chuẩn: [Modern cinematic photorealistic scene directly representing "{topic}"] + [Professional context of {niche_title}] + [High-end aesthetic lighting, 16:9 widescreen composition] + [Negative constraints: absolutely no text, no watermark, no logos, photorealistic 8k].
 
 ĐỊNH DẠNG TRẢ VỀ:
 Hãy trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm theo bất kỳ văn bản giải thích nào ngoài JSON) theo cấu trúc:
@@ -315,7 +369,7 @@ Hãy trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm theo bất
   "title": "Tiêu đề bài viết dưới 65 ký tự",
   "labels": ["Nhãn 1", "Nhãn 2"],
   "metaDescription": "Mô tả tìm kiếm tóm tắt dưới 155 ký tự chuẩn SEO",
-  "imagePrompt": "Detailed English prompt for high-resolution 16:9 cinematic thumbnail directly representing the home appliance topic, photorealistic lighting, modern composition, no text overlay, 8k quality...",
+  "imagePrompt": "Detailed English prompt for high-resolution 16:9 cinematic thumbnail directly representing the topic '{topic}', photorealistic lighting, modern composition, no text overlay, 8k quality...",
   "content": "<div class='seo-post-content'><p>...</p><h2>...</h2>...</div>"
 }}
 """
@@ -918,6 +972,21 @@ def main():
 
     # 3. Khởi tạo dịch vụ Blogger API
     service = get_blogger_service()
+
+    # Tự động lấy Brand Name & Website URL từ tài khoản Blogger nếu chưa được set thủ công
+    global WEBSITE_URL, BRAND_NAME
+    try:
+        blog_info = service.blogs().get(blogId=BLOGGER_BLOG_ID).execute()
+        blog_title = blog_info.get('name', '')
+        blog_url = blog_info.get('url', '')
+        if not BRAND_NAME and blog_title:
+            BRAND_NAME = blog_title
+            print(f"🏷️ Tự động nhận diện Tên Thương Hiệu từ Blogger: '{BRAND_NAME}'")
+        if not WEBSITE_URL and blog_url:
+            WEBSITE_URL = blog_url
+            print(f"🌐 Tự động nhận diện Website URL từ Blogger: '{WEBSITE_URL}'")
+    except Exception as e_info:
+        print(f"ℹ️ Không lấy được metadata từ Blogger (dùng cấu hình mặc định): {e_info}")
 
     # 4. Viết và đăng từng bài theo kế hoạch
     success_count = 0

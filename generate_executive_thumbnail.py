@@ -28,6 +28,9 @@ if sys.platform.startswith('win'):
     except Exception:
         pass
 
+BRAND_NAME = os.environ.get('BRAND_NAME', os.environ.get('WEBSITE_NAME', '')).strip()
+WEBSITE_URL = os.environ.get('WEBSITE_URL', os.environ.get('BLOG_URL', '')).strip()
+
 # ==============================================================================
 # BỘ SƯU TẬP ẢNH NỀN THEO CHỦ ĐỀ CHUẨN DOANH NHÂN & CÔNG NGHỆ (1920x1080)
 # ==============================================================================
@@ -293,7 +296,7 @@ def extract_smart_hook(title, summary="", keyword=""):
     clean_title = re.sub(r'\[.*?\]|\(.*?\)|2026|Năm 2026', '', title).strip()
     corpus = (clean_title + " " + summary + " " + keyword).lower()
 
-    # Nhận diện theo từ khóa chuyên biệt bám sát 30 đề tài BNI Topaz
+    # Nhận diện theo từ khóa chuyên biệt kết nối kinh doanh & giao thương B2B
     if any(k in corpus for k in ['kim cương', 'chapter kim cương']):
         return "CHAPTER BNI", "KIM CƯƠNG", "DANH HIỆU CAO QUÝ"
     if any(k in corpus for k in ['power team']):
@@ -346,8 +349,9 @@ def extract_smart_hook(title, summary="", keyword=""):
         return "DOANH NGHIỆP BÁN LẺ", "TIẾP CẬN DOANH NHÂN", "GIỎ QUÀ B2B"
     if any(k in corpus for k in ['họp online', 'online thay vì offline', 'zoom', 'tiết kiệm 3 giờ', 'giữ lửa năng lượng']):
         return "HỌP BNI ONLINE", "TIẾT KIỆM 3 GIỜ", "TỐI ƯU CHI PHÍ"
+    default_badge = BRAND_NAME.upper() if BRAND_NAME else "CHUYÊN GIA TƯ VẤN"
     if any(k in corpus for k in ['kỷ nguyên số', 'đột phá kỷ nguyên']):
-        return "GIAO THƯƠNG ĐỘT PHÁ", "KỶ NGUYÊN SỐ", "BNI TOPAZ ONLINE"
+        return "GIAO THƯƠNG ĐỘT PHÁ", "KỶ NGUYÊN SỐ", default_badge
 
     # Tự động cắt tách thông minh từ tiêu đề nếu là chủ đề khác
     stop_words = {'tại', 'sao', 'là', 'gì', 'của', 'và', 'để', 'cho', 'trong', 'với', 'như', 'thế', 'nào', 'khi', 'vì', 'bởi'}
@@ -356,7 +360,7 @@ def extract_smart_hook(title, summary="", keyword=""):
     w2 = words[len(w1):min(len(w1) + 3, len(words))] or ["BÍ QUYẾT 2026"]
     line1 = " ".join(w1).upper()
     line2 = " ".join(w2).upper()
-    return line1, line2, "BNI TOPAZ ONLINE"
+    return line1, line2, default_badge
 
 def extract_2lines_hook(title, summary="", keyword=""):
     """Hàm tương thích ngược trả về 2 hàng hook"""
@@ -371,8 +375,8 @@ def generate_bg_prompt_from_summary(title, summary=""):
 
     if any(k in combined for k in ['zoom', 'họp online', 'online']):
         topic_desc = "High-tech executive video conference on a sleek laptop screen, Zoom meeting with diverse business leaders, coffee cup, modern minimal workspace"
-    elif any(k in combined for k in ['bni', 'topaz', 'referral', 'kết nối kinh doanh', 'networking', 'givers gain']):
-        topic_desc = "Prestigious executive business boardroom with confident Asian business leaders in bespoke suits networking and shaking hands, BNI corporate red and rich navy accents"
+    elif any(k in combined for k in ['kết nối kinh doanh', 'networking', 'hội nghị', 'doanh nhân']):
+        topic_desc = "Prestigious executive business boardroom with confident Asian business leaders in bespoke suits networking and shaking hands, elegant corporate accents"
     elif any(k in combined for k in ['bất động sản', 'nhà đất']):
         topic_desc = "Modern luxury architectural villa with glass facade at golden hour sunset, warm interior lighting, sleek infinity pool"
     elif any(k in combined for k in ['hóa đơn', 'invoice', 'bán lẻ', 'pos']):
@@ -380,7 +384,7 @@ def generate_bg_prompt_from_summary(title, summary=""):
     elif any(k in combined for k in ['quảng cáo', 'ads', 'marketing']):
         topic_desc = "High-tech digital marketing workspace, dual curved monitors glowing with sleek upward business analytical graphs"
     else:
-        topic_desc = f"Cinematic executive business scene relevant to {title[:35]}, BNI red and navy corporate atmosphere, professional ambient lighting"
+        topic_desc = f"Cinematic scene relevant to {title[:35]}, professional aesthetic lighting, modern ambient composition"
 
     prompt = (
         f"Cinematic 16:9 YouTube thumbnail background photography. {topic_desc}. "
@@ -394,7 +398,7 @@ def build_executive_thumbnail(
     output_path,
     headline_top="BẤT ĐỘNG SẢN",
     headline_bottom="CHỐT TRIỆU ĐÔ",
-    badge_label="BNI TOPAZ ONLINE",
+    badge_label=None,
     title="",
     keyword=""
 ):
@@ -403,7 +407,7 @@ def build_executive_thumbnail(
     - Chữ 2 hàng, mỗi hàng tối đa 3 chữ, chữ TO, viền sáng phát quang
     - Ít chữ và ít icon, tập trung độ tương phản cao
     - Badge danh mục thông minh theo tiêu đề
-    - Logo Watermark tinh tế BNI TOPAZ™
+    - Watermark thương hiệu trang nhã (nếu có cấu hình BRAND_NAME)
     """
     print("🎨 Đang khởi tạo bộ máy thiết kế Thumbnail YouTube Chuẩn Cao...")
     target_w, target_h = 1920, 1080
@@ -458,10 +462,10 @@ def build_executive_thumbnail(
             font_main = get_best_font(font_size, bold=True)
 
     font_badge = get_best_font(38, bold=True)
-    font_logo = get_best_font(42, bold=True)
 
     # 3. Badge nhỏ gọn gàng phía trên (tối giản, trang nhã, biến đổi linh hoạt theo đề tài)
-    clean_badge = re.sub(r'[^\w\s\d\-+]', '', badge_label).strip() or "BNI TOPAZ ONLINE"
+    default_fallback_badge = BRAND_NAME.upper() if BRAND_NAME else "CHUYÊN GIA TƯ VẤN"
+    clean_badge = re.sub(r'[^\w\s\d\-+]', '', badge_label or '').strip() or default_fallback_badge
     b_box = draw.textbbox((0, 0), clean_badge, font=font_badge)
     bw = b_box[2] - b_box[0] + 44
     bh = b_box[3] - b_box[1] + 24
@@ -514,18 +518,23 @@ def build_executive_thumbnail(
         depth=14
     )
 
-    # 6. Logo Watermark nhỏ tinh tế ở góc phải trên
-    logo_w, logo_h = 240, 65
-    lx = target_w - logo_w - 70
-    ly = 60
-    draw.rounded_rectangle(
-        [(lx, ly), (lx + logo_w, ly + logo_h)],
-        radius=10,
-        fill=(15, 23, 42, 190),
-        outline=(56, 189, 248, 160),
-        width=2
-    )
-    draw.text((lx + 20, ly + 10), "BNI TOPAZ™", font=font_logo, fill=(255, 255, 255, 255))
+    # 6. Logo Watermark nhỏ tinh tế ở góc phải trên (chỉ vẽ khi người dùng cấu hình BRAND_NAME)
+    if BRAND_NAME:
+        logo_text = f"{BRAND_NAME.upper()}™"
+        font_logo = get_best_font(34, bold=True)
+        l_box = draw.textbbox((0, 0), logo_text, font=font_logo)
+        logo_w = l_box[2] - l_box[0] + 40
+        logo_h = l_box[3] - l_box[1] + 24
+        lx = target_w - logo_w - 70
+        ly = 60
+        draw.rounded_rectangle(
+            [(lx, ly), (lx + logo_w, ly + logo_h)],
+            radius=10,
+            fill=(15, 23, 42, 190),
+            outline=(56, 189, 248, 160),
+            width=2
+        )
+        draw.text((lx + 20, ly + 10), logo_text, font=font_logo, fill=(255, 255, 255, 255))
 
     # 7. Tối ưu hóa & nén ảnh đa tầng (WebP + JPEG Progressive 1200x675)
     os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
@@ -587,8 +596,9 @@ def compress_and_save_image(base_img, output_webp_path, output_jpg_path=None, ti
     desc = f"{keyword} - {title}".strip(" -") if keyword else title
     if desc:
         exif[0x010E] = desc[:120]  # ImageDescription
-    exif[0x013B] = "BNI Topaz Chapter Online"  # Artist / Thương hiệu
-    exif[0x8298] = "Bản quyền hình ảnh thuộc về BNI Topaz Chapter Online (bnitopaz.com)"  # Copyright
+    artist_brand = BRAND_NAME or (WEBSITE_URL.replace('https://', '').replace('http://', '').strip('/').split('/')[0] if WEBSITE_URL else "Chuyên Gia Nội Dung")
+    exif[0x013B] = artist_brand  # Artist / Thương hiệu
+    exif[0x8298] = f"Bản quyền hình ảnh thuộc về {artist_brand}" + (f" ({WEBSITE_URL})" if WEBSITE_URL else "")  # Copyright
 
     # 4. Lưu định dạng WebP (Google Next-Gen Format)
     os.makedirs(os.path.dirname(os.path.abspath(output_webp_path)), exist_ok=True)
@@ -706,7 +716,7 @@ def create_post_thumbnail(title, summary="", keyword="", custom_image_url="", ap
     3. Trích xuất 2 hàng chữ giật tít chuẩn YouTube (mỗi hàng <= 3 chữ) + Badge chủ đề linh hoạt
     4. Dựng ảnh YouTube Thumbnail với hiệu ứng Neon Glow phát quang + bóng 3D
     5. Nén chuẩn WebP + JPEG Progressive 1200x675 (>85% nhẹ hơn)
-    6. Nhúng siêu dữ liệu EXIF SEO bản quyền BNI Topaz Chapter Online
+    6. Nhúng siêu dữ liệu EXIF SEO bản quyền thương hiệu chuẩn Google
     7. Trả về link CDN vĩnh viễn WebP siêu tốc
     """
     if not repo_full_name:
@@ -791,6 +801,6 @@ def create_post_thumbnail(title, summary="", keyword="", custom_image_url="", ap
     return cdn_url
 
 if __name__ == '__main__':
-    demo_title = "Triết Lý Givers Gain (Cho Là Nhận) Được Vận Hành Như Thế Nào Tại BNI Topaz Chapter?"
+    demo_title = "Hướng Dẫn Tối Ưu Hóa Website Chuẩn SEO Và Tăng Trưởng Đột Phá 2026"
     demo_out = os.path.join(os.path.dirname(__file__), "demo_thumbnail.webp")
-    create_post_thumbnail(demo_title, summary="Khám phá triết lý Cho Là Nhận tại BNI", repo_full_name="luvietseo-stack/blogger-auto-cloud")
+    create_post_thumbnail(demo_title, summary="Khám phá các bước tối ưu SEO onpage", repo_full_name="luvietceo/blogger-auto-poster")
