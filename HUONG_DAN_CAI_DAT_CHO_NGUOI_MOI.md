@@ -1,20 +1,24 @@
 # 🌐 HƯỚNG DẪN CÀI ĐẶT & TRIỂN KHAI TRỌN GÓI HỆ THỐNG BLOGGER AUTO CLOUD
 ## Áp Dụng Cho Mọi Website & Ngành Nghề (Điện Máy, Bất Động Sản, Spa, Thời Trang, Dịch Vụ, B2B...)
 
-> 💡 **Dành cho mọi đối tượng:** Tài liệu này được biên soạn theo nguyên tắc "Cầm tay chỉ việc", từng bước chi tiết từ A đến Z. Dù bạn là chủ shop, marketer, SEOer hay người mới bắt đầu chưa từng lập trình, bạn đều có thể tự tay đưa cỗ máy viết bài tự động này lên Cloud hoạt động 24/7 chỉ sau **10 - 15 phút**!
+> 💡 **Dành cho mọi đối tượng:** Bạn hoàn toàn **KHÔNG CẦN BIẾT LẬP TRÌNH**! Hệ thống hỗ trợ 2 phương thức cài đặt:
+> 1. 🌟 **Phương án 1 (Khuyên dùng số 1 - Siêu tốc & Tự động 100%):** Làm việc trực tiếp cùng **Trợ Lý AI (Google Antigravity / Claude Code / OpenAI Codex / Cursor)** — Bạn chỉ cần dán 1 câu lệnh khởi động, Trợ lý AI sẽ "cầm tay chỉ việc", tự động cấu hình, tự test và tự deploy cho bạn từ A đến Z!
+> 2. 🛠️ **Phương án 2 (Dành cho Kỹ thuật viên / Dev):** Tự thao tác cấu hình thủ công từng bước theo bảng hướng dẫn kỹ thuật.
 
 ---
 
 ## 📑 MỤC LỤC HƯỚNG DẪN
 
 1. [Tổng Quan Kiến Trúc & Nguyên Lý Hoạt Động](#1-tổng-quan-kiến-trúc--nguyên-lý-hoạt-động)
-2. [Bước 1: Chuẩn Bị Trang Blogger & 2 Cài Đặt SEO Bắt Buộc](#bước-1-chuẩn-bị-trang-blogger--2-cài-đặt-seo-bắt-buộc)
-3. [Bước 2: Lấy Google Gemini API Key (Key Pool Đa Tầng)](#bước-2-lấy-google-gemini-api-key-key-pool-đa-tầng)
-4. [Bước 3: Tạo Google Cloud OAuth & Lấy Refresh Token Đăng Bài](#bước-3-tạo-google-cloud-oauth--lấy-refresh-token-đăng-bài)
-5. [Bước 4: Tạo Kho Đề Tài Google Sheets & Cài Webhook 2 Chiều](#bước-4-tạo-kho-đề-tài-google-sheets--cài-webhook-2-chiều)
-6. [Bước 5: Tùy Biến Thương Hiệu & Nội Dung Theo Ngành Nghề Của Bạn](#bước-5-tùy-biến-thương-hiệu--nội-dung-theo-ngành-nghề-của-bạn)
-7. [Bước 6: Triển Khai Đám Mây GitHub Actions 24/7 (Miễn Phí Trọn Đời)](#bước-6-triển-khai-đám-mây-github-actions-247-miễn-phí-trọn-đời)
-8. [Bước 7: Kiểm Tra Vận Hành & Khắc Phục Sự Cố Thường Gặp](#bước-7-kiểm-tra-vận-hành--khắc-phục-sự-cố-thường-gặp)
+2. [🌟 PHƯƠNG ÁN 1: CÀI ĐẶT TỰ ĐỘNG CÙNG TRỢ LÝ AI (ANTIGRAVITY / CLAUDE / CODEX)](#-phương-án-1-cài-đặt-tự-động-cùng-trợ-lý-ai-antigravity--claude--codex)
+3. [🛠️ PHƯƠNG ÁN 2: CÀI ĐẶT THỦ CÔNG TỪNG BƯỚC (DÀNH CHO DEV)](#️-phương-án-2-cài-đặt-thủ-công-từng-bước-dành-cho-dev)
+   - [Bước 1: Chuẩn Bị Trang Blogger & 2 Cài Đặt SEO Bắt Buộc](#bước-1-chuẩn-bị-trang-blogger--2-cài-đặt-seo-bắt-buộc)
+   - [Bước 2: Lấy Google Gemini API Key (Key Pool Đa Tầng)](#bước-2-lấy-google-gemini-api-key-key-pool-đa-tầng)
+   - [Bước 3: Tạo Google Cloud OAuth & Lấy Refresh Token](#bước-3-tạo-google-cloud-oauth--lấy-refresh-token)
+   - [Bước 4: Tạo Kho Đề Tài Google Sheets & Cài Webhook 2 Chiều](#bước-4-tạo-kho-đề-tài-google-sheets--cài-webhook-2-chiều)
+   - [Bước 5: Tùy Biến Ngành Nghề & Thông Tin Thương Hiệu](#bước-5-tùy-biến-ngành-nghề--thông-tin-thương-hiệu)
+   - [Bước 6: Triển Khai Đám Mây GitHub Actions 24/7](#bước-6-triển-khai-đám-mây-github-actions-247)
+4. [Bảng Tra Cứu Khắc Phục Sự Cố Thường Gặp (Troubleshooting)](#bảng-tra-cứu-khắc-phục-sự-cố-thường-gặp)
 
 ---
 
@@ -37,245 +41,214 @@ graph TD
 
 ### ✨ Ưu điểm vượt trội:
 * **Hoàn toàn miễn phí trọn đời:** Chạy trên GitHub Actions với 2.000 phút miễn phí/tháng, không tốn tiền mua máy chủ VPS hay Hosting.
-* **Tự động đăng vào 4 Khung Giờ Vàng:** `07:00`, `11:00`, `15:00`, `19:00` (Giờ Việt Nam).
+* **Tự động lên lịch 4 Khung Giờ Vàng mỗi ngày:** `07:00`, `11:00`, `15:00`, `19:00` (Giờ Việt Nam). Hỗ trợ chạy batch 10 bài/ngày trải đều liên tục không trùng slot.
 * **Bài viết đỉnh cao chuẩn SEO & CRO:** Độ dài 1.500 - 2.000 từ, cấu trúc thẻ Heading H2/H3, Bảng so sánh thông số kỹ thuật (HTML `<table>`), FAQ Schema giải đáp thắc mắc, khối Call To Action (CTA) dẫn khách về Zalo / Hotline / Website.
 * **Tự động bọc shortcode `[tintuc]...[/tintuc]`:** Tương thích 100% với tất cả theme Blogspot (Bizweb, Sapo, Blogspot thương mại điện tử...).
 * **Đồng bộ 2 chiều với Google Sheets:** Bài nào đăng xong tự động đổi màu xanh, điền ngày giờ hẹn và chèn link bài viết trực tiếp vào bảng tính. Không bao giờ bị đăng trùng bài!
 
 ---
 
-## 📝 BƯỚC 1: CHUẨN BỊ TRANG BLOGGER & 2 CÀI ĐẶT SEO BẮT BUỘC
+## 🌟 PHƯƠNG ÁN 1: CÀI ĐẶT TỰ ĐỘNG CÙNG TRỢ LÝ AI (ANTIGRAVITY / CLAUDE / CODEX)
+> 💡 **Khuyên dùng số 1 cho mọi người dùng**: Bạn không cần biết gõ lệnh terminal, không cần tự tạo file `.env`, không cần phải tự sửa code! Trợ lý AI sẽ đóng vai trò như một **Chuyên Viên Kỹ Thuật Riêng** ngồi cạnh bạn.
 
-### 1.1. Tạo Blog mới (Nếu chưa có)
-1. Truy cập: [blogger.com](https://www.blogger.com) và đăng nhập bằng tài khoản Gmail của bạn.
-2. Bấm **Tạo blog (Create Blog)**:
-   * **Tiêu đề:** Tên website / thương hiệu của bạn (Ví dụ: *Điện Máy Gia Dụng Mava*, *Bất Động Sản Nhà Phố*...).
-   * **Địa chỉ URL:** Chọn tên miền con miễn phí (Ví dụ: `mava-dienmay.blogspot.com`). Về sau bạn có thể trỏ tên miền riêng (`.com`, `.vn`) hoàn toàn dễ dàng.
-   * **Tên hiển thị:** Tên tác giả hiển thị dưới bài viết.
+### 👉 Bước 1: Mở thư mục dự án trong Trợ lý AI
+1. Tải về và giải nén thư mục `Blogger_Auto_Cloud_Tron_Goi`.
+2. Mở một trong các công cụ Trợ lý AI sau:
+   * **Google Antigravity IDE** *(Khuyên dùng số 1 - Tích hợp Gemini 2.5 siêu tốc)*
+   * **Claude Code / Claude Desktop**
+   * **Cursor IDE / Windsurf**
+   * **OpenAI Codex / ChatGPT Web**
+3. Chọn menu **File ➔ Open Folder... (Mở thư mục)** ➔ Chọn đúng thư mục `Blogger_Auto_Cloud_Tron_Goi`.
+4. Nhấn tổ hợp phím **`Ctrl + L`** để mở khung chat với Trợ lý AI.
 
-### 1.2. 2 Cài đặt SEO sống còn trên Blogger (BẮT BUỘC PHẢI BẬT)
-Nếu không bật 2 mục này, bài viết AI sẽ bị mất mô tả tìm kiếm và bị lệch giờ đăng:
-1. **Bật Thẻ Meta Mô Tả Tìm Kiếm (Search Description):**
-   * Vào menu bên trái ➔ Chọn **Cài đặt (Settings)**.
-   * Cuộn xuống mục **Thẻ meta (Meta tags)**.
-   * **BẬT công tắc:** `Bật nội dung mô tả tìm kiếm (Enable search description)`.
-   * Nhập mô tả chung cho blog (dưới 150 ký tự) ➔ Bấm **Lưu**.
-2. **Cài Đặt Múi Giờ Việt Nam (GMT+07:00):**
-   * Trong mục Cài đặt ➔ Cuộn xuống phần **Định dạng (Formatting)**.
-   * Bấm vào **Múi giờ (Time zone)** ➔ Chọn chính xác: `(GMT+07:00) Giờ Đông Dương (Hà Nội, Băng Cốc, Jakarta)`.
-   * Bấm **Lưu**.
+### 👉 Bước 2: Dán Câu Lệnh Khởi Động Duy Nhất Gửi Cho AI
+Sao chép nguyên văn câu lệnh dưới đây (cũng có trong file `PROMPT_KHOI_DONG_AI.txt`) và dán vào khung chat với AI:
 
-### 1.3. Lấy `BLOGGER_BLOG_ID`
-* Khi bạn đang ở trang quản trị Blog (`blogger.com`), hãy nhìn lên thanh địa chỉ (URL) của trình duyệt:
-  ```text
-  https://www.blogger.com/blog/posts/2831151491518297988
-  ```
-* Dãy số nằm ngay sau chữ `/posts/` chính là **`BLOGGER_BLOG_ID`** của bạn. Hãy lưu lại dãy số này!
+```text
+Xin chào Trợ lý AI! Tôi muốn cài đặt hệ thống Blogger Auto Cloud cho website của mình.
+Tôi không rành kỹ thuật. Hãy đọc file QUY_TRINH_TRO_LY_AI.md và hướng dẫn tôi theo đúng nguyên tắc "cầm tay chỉ việc, 1 bước 1 câu hỏi":
+1. Đầu tiên hãy hỏi tôi về website của tôi (ngành nghề, tên miền web, Zalo/Hotline liên hệ).
+2. Sau đó hướng dẫn tôi lấy từng thông số một (Blogger ID, Gemini API Key, Google Sheet, Google Cloud OAuth).
+3. Bạn tự động tạo file .env, tự động cập nhật prompt và thông tin thương hiệu trong main.py theo đúng ngành nghề của tôi.
+4. Bạn tự chạy script lấy Refresh Token, kiểm tra kết nối và xuất bản thử nghiệm 1 bài viết lên Blogger cho tôi.
+5. Cuối cùng bạn hỗ trợ tôi đẩy lên GitHub Actions để bot tự chạy 24/7 hoàn toàn miễn phí trọn đời.
+Bây giờ hãy bắt đầu ngay với Bước 1 nhé!
+```
+
+### 👉 Bước 3: Trải nghiệm thực tế - AI sẽ làm thay bạn như thế nào?
+* **AI hỏi ngành nghề & thông tin:** Bạn chỉ cần nói *"Web tôi bán điện máy gia dụng, link mava.luviet.com, zalo 0987..."* hoặc *"Web tôi làm bất động sản..."*.
+  ➔ **AI sẽ tự động:** Tinh chỉnh Prompt chuyên gia trong `main.py`, tạo khối CTA chuẩn màu sắc và thương hiệu của bạn!
+* **AI hướng dẫn lấy ID & Key:** Mỗi lượt chat AI chỉ gửi 1 link duy nhất và chỉ rõ bấm vào đâu. Bạn gửi mã nào AI nhận mã đó.
+* **AI kích hoạt lấy Token:** AI tự chạy lệnh, trình duyệt của bạn tự bật lên ➔ Bạn chỉ việc bấm **Cho phép (Allow)**.
+* **AI tự tạo file `.env` & Chạy test:** AI tự ghi file cấu hình, tự gọi Gemini viết bài mẫu, tự động bọc thẻ `[tintuc]` và gửi link bài viết Blogger vừa đăng thành công ngay trong khung chat cho bạn xem!
+* **AI tự đẩy lên GitHub Actions:** AI hỗ trợ bạn tạo repo **Public**, thiết lập các Secrets và kích hoạt lịch chạy tự động 4 khung giờ vàng mỗi ngày (`07:00, 11:00, 15:00, 19:00`).
 
 ---
 
-## 🔑 BƯỚC 2: LẤY GOOGLE GEMINI API KEY (KEY POOL ĐA TẦNG)
+## 🛠️ PHƯƠNG ÁN 2: CÀI ĐẶT THỦ CÔNG TỪNG BƯỚC (DÀNH CHO DEV)
 
-Hệ thống hỗ trợ cơ chế **Key Pool Rotation** (Xoay vòng nhiều API Key). Nếu Key 1 hết hạn ngạch (quota limit) hoặc bị lỗi tạm thời, bot sẽ tự động chuyển sang Key 2, Key 3 mà tiến trình không bao giờ bị dừng!
+---
+
+### BƯỚC 1: CHUẨN BỊ TRANG BLOGGER & 2 CÀI ĐẶT SEO BẮT BUỘC
+
+#### 1.1. Tạo Blog mới (Nếu chưa có)
+1. Truy cập [blogger.com](https://www.blogger.com) và đăng nhập bằng Gmail của bạn.
+2. Bấm **Tạo blog (Create Blog)** ➔ Đặt tiêu đề và chọn URL (ví dụ: `dienmay-mava.blogspot.com`).
+
+#### 1.2. 2 Cài đặt SEO sống còn trên Blogger
+1. **Bật Thẻ Meta Mô Tả Tìm Kiếm (Search Description):**
+   * Vào **Cài đặt (Settings)** ➔ Cuộn xuống mục **Thẻ meta (Meta tags)**.
+   * **BẬT công tắc:** `Bật nội dung mô tả tìm kiếm (Enable search description)` ➔ Nhập mô tả ngắn ➔ Bấm **Lưu**.
+2. **Cài Đặt Múi Giờ Việt Nam (GMT+07:00):**
+   * Trong **Cài đặt** ➔ Cuộn xuống **Định dạng (Formatting)** ➔ **Múi giờ (Time zone)**.
+   * Chọn đúng: `(GMT+07:00) Giờ Đông Dương (Hà Nội, Băng Cốc, Jakarta)` ➔ Bấm **Lưu**.
+
+#### 1.3. Lấy `BLOGGER_BLOG_ID`
+* Nhìn lên thanh URL trình duyệt khi đang ở trang quản trị blog:
+  `https://www.blogger.com/blog/posts/`**`2831151491518297988`**
+* Dãy số sau chữ `/posts/` chính là **`BLOGGER_BLOG_ID`**.
+
+---
+
+### BƯỚC 2: LẤY GOOGLE GEMINI API KEY (KEY POOL ĐA TẦNG)
 
 1. Truy cập: [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
-2. Đăng nhập tài khoản Google của bạn.
-3. Bấm nút màu xanh **Create API Key** (hoặc *Get API key*).
-4. Chọn **Create API key in new project**.
-5. Sao chép chuỗi mã bắt đầu bằng `AIzaSy...`.
-6. *(Khuyên dùng)* Bạn có thể tạo từ **2 đến 3 API Key** trên các project khác nhau để dự phòng:
-   * Key 1: Lưu vào `GEMINI_API_KEY` (hoặc `GEMINI_API_KEY_1`)
-   * Key 2: Lưu vào `GEMINI_API_KEY_2`
-   * Key 3: Lưu vào `GEMINI_API_KEY_3`
+2. Đăng nhập Google ➔ Bấm nút xanh **Create API Key** ➔ Chọn **Create API key in new project**.
+3. Sao chép chuỗi mã bắt đầu bằng `AIzaSy...`.
+4. *(Khuyên dùng)* Tạo từ 2 đến 3 API Key trên các project Google Cloud khác nhau để làm Key Pool xoay vòng:
+   * `GEMINI_API_KEY`: Key chính
+   * `GEMINI_API_KEY_1`, `GEMINI_API_KEY_2`: Key phụ dự phòng chống nghẽn quota.
 
 ---
 
-## 🔐 BƯỚC 3: TẠO GOOGLE CLOUD OAUTH & LẤY REFRESH TOKEN ĐĂNG BÀI
+### BƯỚC 3: TẠO GOOGLE CLOUD OAUTH & LẤY REFRESH TOKEN
 
-Để bot có quyền đăng bài tự động lên Blogger thay bạn 24/7 mà không cần bạn phải ngồi duyệt, chúng ta cần tạo Google OAuth Client ID:
+#### 3.1. Tạo Project & Bật Blogger API v3
+1. Truy cập [console.cloud.google.com](https://console.cloud.google.com/) ➔ Tạo Project mới (ví dụ: `Blogger-Auto-Bot`).
+2. Vào **APIs & Services** ➔ **Library** ➔ Tìm kiếm `Blogger API v3` ➔ Bấm **Enable (Bật)**.
 
-### 3.1. Tạo Project & Bật Blogger API v3 trên Google Cloud
-1. Truy cập: [console.cloud.google.com](https://console.cloud.google.com/).
-2. Tạo một Project mới (đặt tên ví dụ: `Blogger-Auto-Bot`).
-3. Vào menu **APIs & Services (API và Dịch vụ)** ➔ **Library (Thư viện)**.
-4. Tìm kiếm từ khóa `Blogger API v3` ➔ Bấm vào và chọn nút **Enable (Bật)**.
+#### 3.2. Cấu hình Màn hình chấp thuận OAuth
+1. Vào **APIs & Services** ➔ **OAuth consent screen** ➔ Chọn **External** ➔ Bấm **Create**.
+2. Điền App Name và Email của bạn ➔ Bấm Save qua các bước.
+3. **Tại bước Test users:** Bấm **+ Add users** ➔ Nhập chính Gmail sở hữu Blog của bạn ➔ Bấm Save.
+4. Quay lại màn hình chính OAuth consent screen, bấm nút **Publish App (Xuất bản ứng dụng)**.
 
-### 3.2. Cấu hình Màn hình chấp thuận OAuth (OAuth Consent Screen)
-1. Vào menu **APIs & Services** ➔ **OAuth consent screen (Màn hình chấp thuận OAuth)**.
-2. Chọn loại người dùng: **External (Bên ngoài)** ➔ Bấm **Create**.
-3. Điền các trường cơ bản:
-   * **App name:** `Blogger Auto Poster`
-   * **User support email:** Chọn email của bạn.
-   * **Developer contact information:** Nhập lại email của bạn.
-   * Bấm **Save and continue** qua các bước Scopes.
-4. Tại bước **Test users (Người dùng thử nghiệm)**:
-   * Bấm **+ Add users** ➔ Nhập chính địa chỉ Gmail sở hữu trang Blogger của bạn ➔ Bấm **Save**.
+#### 3.3. Tạo Client ID & Client Secret
+1. Vào **Credentials** ➔ Bấm **+ Create Credentials** ➔ Chọn **OAuth client ID**.
+2. Loại ứng dụng: Chọn **Desktop app** (hoặc Web application có redirect `http://localhost:8080/`).
+3. Sao chép **Client ID** (`xxx.apps.googleusercontent.com`) và **Client Secret** (`GOCSPX-xxx`).
 
-### 3.3. Tạo Client ID & Client Secret
-1. Vào menu **Credentials (Thông tin xác thực)** ➔ Bấm **+ Create Credentials (+ Tạo thông tin xác thực)** ➔ Chọn **OAuth client ID**.
-2. Mục **Application type (Loại ứng dụng)**: Chọn **Desktop app (Ứng dụng cho máy tính)** hoặc **Web application**.
-   * *Nếu chọn Web application:* Thêm URI chuyển hướng được ủy quyền: `http://localhost:8080/` và `https://developers.google.com/oauthplayground`.
-3. Bấm **Create (Tạo)**.
-4. Hệ thống sẽ hiển thị:
-   * **Client ID:** Dạng `xxxxxx.apps.googleusercontent.com`
-   * **Client Secret:** Dạng `GOCSPX-xxxxxx`
-   * 👉 Hãy sao chép 2 thông số này lại!
-
-### 3.4. Lấy `GOOGLE_REFRESH_TOKEN` tự động (Chỉ mất 30 giây)
-Trong thư mục mã nguồn đã có sẵn script lấy token tự động:
-1. Mở Terminal / PowerShell trong thư mục dự án và chạy:
-   ```bash
-   python get_refresh_token.py
-   ```
-2. Dán `Client ID` và `Client Secret` của bạn vào khi được hỏi.
-3. Trình duyệt trên máy tính sẽ tự động bật lên ➔ Đăng nhập Gmail sở hữu Blogger.
-4. Nếu thấy cảnh báo "Google chưa xác minh ứng dụng này" ➔ Bấm **Nâng cao (Advanced)** ➔ Chọn **Đi tới ... (Không an toàn)** ➔ Tích chọn quyền quản trị Blogger ➔ Bấm **Cho phép (Allow)**.
-5. Màn hình console sẽ xuất ra chuỗi mã bắt đầu bằng: `1//0...`
-   👉 Đó chính là **`GOOGLE_REFRESH_TOKEN`** của bạn! Mã này có giá trị vĩnh viễn.
+#### 3.4. Lấy Refresh Token tự động trong 30 giây
+Mở terminal tại thư mục dự án và chạy:
+```bash
+python get_refresh_token.py
+```
+Dán Client ID và Client Secret vào ➔ Trình duyệt tự bật ➔ Chọn Gmail ➔ Bấm Nâng cao ➔ Cho phép.  
+Màn hình sẽ in ra chuỗi mã bắt đầu bằng `1//0...` ➔ Đó là **`GOOGLE_REFRESH_TOKEN`** vĩnh viễn!
 
 ---
 
-## 📊 BƯỚC 4: TẠO KHO ĐỀ TÀI GOOGLE SHEETS & CÀI WEBHOOK 2 CHIỀU
+### BƯỚC 4: TẠO KHO ĐỀ TÀI GOOGLE SHEETS & CÀI WEBHOOK 2 CHIỀU
 
-### 4.1. Cấu trúc Bảng Tính Google Sheets Chuẩn (9 Cột)
-Tạo một Google Sheet mới với các tiêu đề cột tại dòng 1 như sau:
+#### 4.1. Tạo Google Sheets Chuẩn 9 Cột
+Tạo một Google Sheet mới với các tiêu đề cột tại dòng 1:
 
-| Cột | Tên Cột (Header) | Ý Nghĩa | Ví Dụ |
-| :---: | :--- | :--- | :--- |
-| **A** | `STT` | Số thứ tự bài viết | `1`, `2`, `3`... |
-| **B** | `Tiêu Đề Bài Viết (Blogger Title)` | Đề tài hoặc tiêu đề chính | `Top 5 Tủ Lạnh Inverter Tiết Kiệm Điện 2026` |
-| **C** | `Từ Khóa Chính (Focus Keyword)` | Từ khóa SEO trọng tâm | `tủ lạnh inverter, tủ lạnh tiết kiệm điện` |
-| **D** | `Nhãn Chuyên Mục (Labels)` | Nhãn phân loại trên Blogspot | `tin-tuc, tu-van-chon-mua` |
-| **E** | `Gợi Ý Nội Dung / Góc Nhìn` | Gợi ý ý tưởng để AI bám sát | `Đánh giá các dòng Panasonic, LG, so sánh giá` |
-| **F** | `Link Đích CTA` | Link Zalo/Hotline/Sản phẩm | `https://zalo.me/1501073926693571291` |
-| **G** | `Trạng Thái` | Trạng thái xuất bản | Để trống hoặc ghi `Chưa đăng` |
-| **H** | `Ngày Lên Lịch / Đăng` | Bot tự điền ngày giờ hẹn | *(Bot tự điền sau khi đăng)* |
-| **I** | `Link Bài Viết (URL)` | Bot tự điền link Blogger | *(Bot tự điền sau khi đăng)* |
+| Cột | Tên Cột (Header) | Ý Nghĩa |
+| :---: | :--- | :--- |
+| **A** | `STT` | Số thứ tự bài viết (`1`, `2`...) |
+| **B** | `Tiêu Đề Bài Viết (Blogger Title)` | Đề tài hoặc tiêu đề chính |
+| **C** | `Từ Khóa Chính (Focus Keyword)` | Từ khóa SEO trọng tâm |
+| **D** | `Nhãn Chuyên Mục (Labels)` | Nhãn hiển thị (`tin-tuc`, `tu-van-chon-mua`...) |
+| **E** | `Gợi Ý Nội Dung / Góc Nhìn` | Tóm tắt ý chính để AI bám sát |
+| **F** | `Link Đích CTA` | Link Zalo/Hotline/Sản phẩm chuyển đổi |
+| **G** | `Trạng Thái` | Trạng thái bài viết (`Chưa đăng`) |
+| **H** | `Ngày Lên Lịch / Đăng` | Bot tự điền ngày giờ hẹn sau khi đăng |
+| **I** | `Link Bài Viết (URL)` | Bot tự điền link bài Blogger sau khi đăng |
 
-> ⚠️ **BẮT BUỘC BẬT QUYỀN CHIA SẺ:**
-> Nhấn nút **Chia sẻ (Share)** ở góc trên bên phải Google Sheet ➔ Tại mục *Quyền truy cập chung*, chuyển thành **"Bất kỳ ai có đường liên kết đều có thể xem" (Anyone with the link can view)** ➔ Sao chép đường link Google Sheets này làm biến **`GOOGLE_SHEET_URL`**.
+> ⚠️ **BẬT QUYỀN CHIA SẺ:** Bấm nút **Chia sẻ (Share)** ở góc trên bên phải ➔ Chuyển thành **"Bất kỳ ai có đường liên kết đều có thể xem" (Anyone with the link can view)** ➔ Copy link này làm biến **`GOOGLE_SHEET_URL`**.
 
-### 4.2. Cài đặt Webhook Google Apps Script (Tự động đổi màu & điền link)
-1. Trên Google Sheets của bạn ➔ Bấm vào menu **Tiện ích mở rộng (Extensions)** ➔ Chọn **Apps Script**.
-2. Xóa hết code mặc định, mở file [`google_sheets_webhook.js`](file:///c:/Users/Admin/Downloads/Blogger_Auto_Cloud_Tron_Goi/google_sheets_webhook.js) trong bộ mã nguồn và **sao chép toàn bộ code dán vào**.
-3. Bấm biểu tượng **Lưu (Ctrl + S)**.
-4. Bấm nút màu xanh **Triển khai (Deploy)** ở góc trên bên phải ➔ Chọn **Bản triển khai mới (New deployment)**.
-5. Bấm vào biểu tượng bánh răng ⚙️ bên cạnh chữ *Chọn loại* ➔ Chọn **Ứng dụng web (Web app)**:
+#### 4.2. Cài đặt Webhook Google Apps Script
+1. Trên Google Sheets ➔ Bấm menu **Tiện ích mở rộng (Extensions)** ➔ **Apps Script**.
+2. Xóa code cũ, dán toàn bộ mã nguồn file [`google_sheets_webhook.js`](file:///c:/Users/Admin/Downloads/Blogger_Auto_Cloud_Tron_Goi/google_sheets_webhook.js) vào.
+3. Bấm **Lưu (Ctrl + S)** ➔ Bấm **Triển khai (Deploy)** ➔ **Bản triển khai mới (New deployment)**.
+4. Chọn loại **Ứng dụng web (Web app)**:
    * **Mô tả:** `Blogger Webhook Auto`
-   * **Thực thi dưới dạng (Execute as):** `Tôi (Email của bạn)`
-   * **Ai có quyền truy cập (Who has access):** Chọn **Bất kỳ ai (Anyone)** *(Rất quan trọng, phải chọn Anyone thì GitHub Actions mới gửi dữ liệu vào được)*.
-6. Bấm **Triển khai (Deploy)** ➔ Bấm **Ủy quyền truy cập (Authorize access)** ➔ Chọn Gmail ➔ Bấm **Nâng cao ➔ Đi tới... ➔ Cho phép**.
-7. Sao chép đường link Web App có đuôi kết thúc bằng **`/exec`**.
-   👉 Đây chính là **`GOOGLE_SHEET_WEBHOOK_URL`** của bạn!
+   * **Thực thi dưới dạng:** `Tôi (Email của bạn)`
+   * **Ai có quyền truy cập:** Chọn **Bất kỳ ai (Anyone)** *(Bắt buộc chọn Anyone)*.
+5. Bấm **Triển khai** ➔ Cấp quyền xác thực ➔ Copy link Web App có đuôi kết thúc bằng **`/exec`**.  
+   👉 Đó là **`GOOGLE_SHEET_WEBHOOK_URL`** của bạn!
 
 ---
 
-## 🎨 BƯỚC 5: TÙY BIẾN THƯƠNG HIỆU & NỘI DUNG THEO NGÀNH NGHỀ
+### BƯỚC 5: TÙY BIẾN NGÀNH NGHỀ & THÔNG TIN THƯƠNG HIỆU
 
-Để áp dụng cho **bất kỳ website nào**, bạn chỉ cần mở file [`main.py`](file:///c:/Users/Admin/Downloads/Blogger_Auto_Cloud_Tron_Goi/main.py) và điều chỉnh 3 vị trí sau:
+Mở file [`main.py`](file:///c:/Users/Admin/Downloads/Blogger_Auto_Cloud_Tron_Goi/main.py) và cấu hình theo website của bạn:
 
-### 5.1. Khung giờ đăng bài & Số lượng bài viết mỗi ngày
-Tìm đến khoảng dòng `110` trong `main.py`:
-```python
-# Cấu hình số bài tạo mỗi lần (Mặc định 10 bài, lên lịch trải đều 4 bài/ngày)
-POSTS_COUNT = int(os.environ.get('POSTS_COUNT', '10'))
-
-# 4 Khung giờ vàng xuất bản bài mỗi ngày (Giờ Việt Nam UTC+7)
-GOLDEN_SLOTS = [(7, 0), (11, 0), (15, 0), (19, 0)]
-```
-* Nếu muốn đổi giờ: Bạn chỉ cần sửa số trong `GOLDEN_SLOTS`. Ví dụ: `[(8, 0), (12, 0), (16, 0), (20, 0)]`.
-* Khi hệ thống chạy tạo 10 bài, nó sẽ tự động lên lịch vào 4 khung giờ này của ngày 1 (4 bài), ngày 2 (4 bài), ngày 3 (2 bài) mà không bao giờ bị đè slot.
-
-### 5.2. Thông tin thương hiệu & Kênh liên hệ
-Tìm đến khoảng dòng `155` trong `main.py`:
-```python
-WEBSITE_URL = os.environ.get('WEBSITE_URL', 'https://tenmiencuaban.com/').strip()
-ZALO_URL = os.environ.get('ZALO_URL', 'https://zalo.me/sdt-cua-ban').strip()
-FANPAGE_URL = os.environ.get('FANPAGE_URL', 'https://facebook.com/trang-cua-ban').strip()
-CTA_URL = os.environ.get('CTA_URL', ZALO_URL or WEBSITE_URL).strip()
-```
-*(Bạn cũng có thể cấu hình trực tiếp các biến này trong file `.env` hoặc GitHub Secrets mà không cần sửa code).*
-
-### 5.3. Định vị Prompt AI theo chuyên môn ngành nghề
-Tại hàm `generate_seo_article()` (khoảng dòng `255`), bạn có thể tinh chỉnh vai trò chuyên gia cho phù hợp:
-* **Nếu làm Bất động sản:** *"Bạn là Chuyên gia Tư vấn Đầu tư Bất Động Sản & Quy Hoạch Nhà Đất hàng đầu Việt Nam..."*
-* **Nếu làm Mỹ phẩm / Spa:** *"Bạn là Bác sĩ Da liễu & Chuyên gia Trị liệu Thẩm mỹ cao cấp..."*
-* **Nếu làm Điện máy / Gia dụng:** *(Đã được cấu hình chuẩn sẵn Chuyên gia Cố vấn Kỹ thuật & Review Điện Máy Thông Minh)*.
-* **Nếu làm Du lịch / Khách sạn:** *"Bạn là Chuyên gia Cẩm nang Du lịch, Review Trải nghiệm & Hướng dẫn viên kỳ cựu..."*
+1. **Khung giờ đăng & Số lượng bài (dòng `110`):**
+   ```python
+   POSTS_COUNT = int(os.environ.get('POSTS_COUNT', '10')) # Mặc định 10 bài/mẻ
+   GOLDEN_SLOTS = [(7, 0), (11, 0), (15, 0), (19, 0)]    # 4 Khung giờ vàng/ngày
+   ```
+2. **Thông tin thương hiệu (dòng `155`):**
+   ```python
+   WEBSITE_URL = os.environ.get('WEBSITE_URL', 'https://website-cua-ban.com/').strip()
+   ZALO_URL = os.environ.get('ZALO_URL', 'https://zalo.me/sdt-cua-ban').strip()
+   FANPAGE_URL = os.environ.get('FANPAGE_URL', 'https://facebook.com/trang-cua-ban').strip()
+   CTA_URL = os.environ.get('CTA_URL', ZALO_URL or WEBSITE_URL).strip()
+   ```
+3. **Định vị Prompt AI theo ngành nghề (dòng `255`):**
+   * Tùy chỉnh vai trò chuyên gia tương ứng: Điện máy, Bất động sản, Spa, Du lịch, Thời trang...
 
 ---
 
-## 🚀 BƯỚC 6: TRIỂN KHAI ĐÁM MÂY GITHUB ACTIONS 24/7 (MIỄN PHÍ)
+### BƯỚC 6: TRIỂN KHAI ĐÁM MÂY GITHUB ACTIONS 24/7
 
-### 6.1. Đưa mã nguồn lên GitHub Repository
-1. Đăng nhập [GitHub.com](https://github.com) ➔ Tạo Repository mới (Ví dụ: `blogger-auto-poster`).
-2. > ⚠️ **CỰC KỲ QUAN TRỌNG: CHỌN CHẾ ĐỘ "PUBLIC"**
-   > * Tại sao phải chọn **Public**? Vì hệ thống tự động sinh ảnh Thumbnail WebP chuẩn SEO lưu trong thư mục `thumbnails/`. GitHub sẽ đóng vai trò làm **máy chủ CDN lưu ảnh miễn phí**. Nếu để Private, link ảnh sẽ bị chặn 404 và không xem được trên website!
-   > * *Về độ an toàn:* Toàn bộ API Key, Client Secret và Refresh Token được bảo mật tuyệt đối trong **GitHub Secrets**, file cấu hình máy tính `.env` đã được chặn không bị đẩy lên, do đó để Public mã nguồn hoàn toàn an toàn 100%!
-3. Tải toàn bộ mã nguồn dự án lên repository của bạn bằng Git:
+#### 6.1. Tạo Repository GitHub ở chế độ PUBLIC
+1. Truy cập [github.com](https://github.com) ➔ Tạo Repository mới.
+2. > ⚠️ **BẮT BUỘC CHỌN CHẾ ĐỘ "PUBLIC":**
+   > * Repository phải ở chế độ **Public** để ảnh Thumbnail WebP được load qua GitHub CDN vĩnh viễn miễn phí (không bị lỗi 404).
+   > * *An toàn 100%:* Toàn bộ API Key, Client Secret và Refresh Token được lưu trong GitHub Secrets, file `.env` đã nằm trong `.gitignore` không bao giờ bị lộ lên GitHub.
+3. Đẩy toàn bộ mã nguồn lên:
    ```bash
    git init
-   git remote add origin https://github.com/<tai-khoan-github>/<ten-repo>.git
+   git remote add origin https://github.com/<tai-khoan>/<ten-repo>.git
    git branch -M main
    git add .
-   git commit -m "🚀 Khởi tạo hệ thống Blogger Auto Cloud"
+   git commit -m "🚀 Triển khai Blogger Auto Cloud"
    git push -u origin main
    ```
 
-### 6.2. Cài đặt GitHub Secrets (Bảo mật thông tin đăng nhập)
-1. Trên trang GitHub Repository của bạn, bấm vào tab **Settings** (ở trên thanh công cụ).
-2. Ở cột menu bên trái, tìm mục **Secrets and variables** ➔ Chọn **Actions**.
-3. Nhấn nút xanh **New repository secret** và lần lượt thêm các biến sau:
+#### 6.2. Cài đặt GitHub Secrets
+Vào Repository trên GitHub ➔ **Settings** ➔ **Secrets and variables** ➔ **Actions** ➔ Bấm **New repository secret** và thêm:
 
-| Tên Secret (Bắt buộc viết hoa) | Giá Trị Cần Dán Vào |
+| Tên Secret | Giá Trị |
 | :--- | :--- |
-| **`GEMINI_API_KEY`** | Khóa API Gemini chính (`AIzaSy...`) |
-| **`GEMINI_API_KEY_1`** *(Tùy chọn)* | Khóa Gemini dự phòng 1 |
-| **`GEMINI_API_KEY_2`** *(Tùy chọn)* | Khóa Gemini dự phòng 2 |
-| **`BLOGGER_BLOG_ID`** | ID trang Blogspot (Dãy số ở Bước 1.3) |
-| **`GOOGLE_CLIENT_ID`** | Client ID OAuth (Ở Bước 3.3) |
-| **`GOOGLE_CLIENT_SECRET`** | Client Secret OAuth (Ở Bước 3.3) |
-| **`GOOGLE_REFRESH_TOKEN`** | Token vĩnh viễn (Chuỗi `1//0...` ở Bước 3.4) |
-| **`GOOGLE_SHEET_URL`** | Link chia sẻ Google Sheet (Ở Bước 4.1) |
-| **`GOOGLE_SHEET_WEBHOOK_URL`** | Link Web App Apps Script `/exec` (Ở Bước 4.2) |
-| **`TELEGRAM_BOT_TOKEN`** *(Tùy chọn)* | Token Bot Telegram nhận thông báo bài mới |
-| **`TELEGRAM_CHAT_ID`** *(Tùy chọn)* | Chat ID Telegram cá nhân hoặc nhóm |
+| `GEMINI_API_KEY` | Mã API Key Gemini chính |
+| `GEMINI_API_KEY_1`, `2` | Khóa Gemini dự phòng (xoay tua chống hết hạn ngạch) |
+| `BLOGGER_BLOG_ID` | Dãy số ID của trang Blog Blogger |
+| `GOOGLE_CLIENT_ID` | Client ID Google Cloud OAuth |
+| `GOOGLE_CLIENT_SECRET` | Client Secret Google Cloud OAuth |
+| `GOOGLE_REFRESH_TOKEN` | Token vĩnh viễn chuỗi `1//0...` |
+| `GOOGLE_SHEET_URL` | Link Google Sheet chia sẻ công khai |
+| `GOOGLE_SHEET_WEBHOOK_URL` | Link Web App Apps Script `/exec` |
+| `TELEGRAM_BOT_TOKEN` *(Tùy chọn)* | Token bot Telegram nhận báo cáo |
+| `TELEGRAM_CHAT_ID` *(Tùy chọn)* | Chat ID cá nhân/nhóm Telegram |
 
-### 6.3. Cấp quyền Ghi (Write Permissions) cho GitHub Actions
-Để GitHub Actions có quyền tự động lưu lịch sử bài đã đăng (`posted_history.json`) và lưu ảnh Thumbnail:
-1. Vẫn trong trang **Settings** của repository trên GitHub.
-2. Ở menu bên trái, cuộn xuống chọn mục **Actions** ➔ **General**.
-3. Cuộn xuống cuối trang đến phần **Workflow permissions**:
-   * Tích chọn vào ô: **`Read and write permissions`** (Cho phép đọc và ghi).
-   * Bấm **Save (Lưu)**.
+#### 6.3. Bật quyền Ghi (Write Permissions)
+Vào **Settings** ➔ **Actions** ➔ **General** ➔ Cuộn xuống mục **Workflow permissions**:
+* Tích chọn **`Read and write permissions`** ➔ Bấm **Save**.
+
+#### 6.4. Chạy thử nghiệm trên GitHub Actions
+Vào tab **Actions** ➔ Chọn **🚀 Blogger Gemini AI Auto-Poster Cloud** ➔ Bấm nút **Run workflow** ➔ Chờ 1 - 2 phút và thưởng thức thành quả bài viết tự động xuất bản chuẩn SEO lên website!
 
 ---
 
-## 🎯 BƯỚC 7: KIỂM TRA VẬN HÀNH & KHẮC PHỤC SỰ CỐ
-
-### 7.1. Chạy thử nghiệm ngay trên Web GitHub
-1. Vào tab **Actions** trên thanh menu GitHub Repository của bạn.
-2. Ở cột bên trái, bấm vào workflow: **`🚀 Blogger Gemini AI Auto-Poster Cloud`**.
-3. Ở khung bên phải, bấm vào nút: **Run workflow**:
-   * **Số lượng bài viết:** Chọn số lượng muốn tạo (ví dụ chọn `1` để thử nghiệm hoặc `10` để lên lịch cả mẻ).
-   * **Chế độ phát hành:** Chọn `schedule` (hẹn giờ khung giờ vàng) hoặc `publish` (đăng ngay lập tức).
-   * Bấm nút màu xanh **Run workflow**.
-4. Chờ khoảng 1 - 2 phút, workflow sẽ chuyển sang màu xanh lá cây ✅:
-   * Mở Google Sheet: Bạn sẽ thấy dòng đề tài tương ứng được tô màu xanh, điền ngày giờ hẹn và chèn link bài viết trực tiếp!
-   * Mở Blogger / Website: Bài viết đã được tạo hoàn hảo với ảnh Thumbnail 16:9 sắc nét, bảng so sánh và nút liên hệ!
-
----
-
-### 7.2. Bảng Tổng Hợp Khắc Phục Sự Cố Thường Gặp
+## 🛠️ BẢNG TRA CỨU KHẮC PHỤC SỰ CỐ THƯỜNG GẶP
 
 | Hiện Tượng | Nguyên Nhân | Cách Khắc Phục Triệt Để |
 | :--- | :--- | :--- |
-| **Bài đăng lên web nhưng không hiển thị nội dung** | Theme Blogspot sử dụng shortcode `[tintuc]` để bóc tách hiển thị | Hệ thống đã tích hợp sẵn lệnh tự động bọc `[tintuc]{nội dung}[/tintuc]` trong `main.py`. Bạn không cần phải thao tác gì thủ công. |
-| **Ảnh Thumbnail bị lỗi hình ảnh / 404** | Repository GitHub đang để ở chế độ Private | Vào GitHub Repository ➔ **Settings** ➔ Kéo xuống cuối mục **Danger Zone** ➔ Đổi sang **Change to public**. |
-| **Google Sheet không cập nhật trạng thái "Đã đăng"** | Webhook Apps Script chưa cấp quyền "Anyone" | Mở Apps Script ➔ Triển khai lại ➔ Đảm bảo mục *Ai có quyền truy cập* chọn **Bất kỳ ai (Anyone)**. |
+| **Bài đăng lên blog nhưng bị ẩn, không hiện nội dung** | Theme Blogspot sử dụng shortcode `[tintuc]` để bóc tách hiển thị | Hệ thống đã tích hợp sẵn lệnh tự động bọc `[tintuc]{nội dung}[/tintuc]` trong `main.py`. Mọi bài đăng đều hiển thị 100%. |
+| **Ảnh Thumbnail bị lỗi hình ảnh / 404** | Repository GitHub đang để ở chế độ Private | Vào GitHub Repository ➔ **Settings** ➔ Cuối mục **Danger Zone** ➔ Chọn **Change to public**. |
+| **Google Sheet không tự đổi màu và không điền link** | Webhook Apps Script chưa cấp quyền "Anyone" | Mở Apps Script ➔ Triển khai lại ➔ Đảm bảo mục *Ai có quyền truy cập* chọn **Bất kỳ ai (Anyone)**. |
 | **Gemini AI báo lỗi Resource Exhausted (429)** | Hết hạn ngạch gọi API miễn phí trong ngày | Thêm các key phụ `GEMINI_API_KEY_1`, `GEMINI_API_KEY_2` vào GitHub Secrets để bot tự xoay vòng. |
 | **Bài hẹn giờ bị sai lệch múi giờ (đăng ban đêm)** | Blogger chưa chỉnh sang múi giờ GMT+07 | Vào Cài đặt Blogger ➔ Múi giờ ➔ Chọn đúng `(GMT+07:00) Hà Nội, Băng Cốc`. |
-
----
-
-> 🎉 **Chúc mừng bạn!** Bạn đã sở hữu một cỗ máy tự động hóa nội dung đẳng cấp chuẩn SEO & CRO chạy hoàn toàn trên đám mây. Bạn chỉ việc thêm đề tài vào Google Sheet, mọi việc còn lại từ viết bài, dựng ảnh, gắn link đến xuất bản bài viết theo khung giờ vàng đều được AI và GitHub Actions xử lý tự động 100%!

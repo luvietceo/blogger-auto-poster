@@ -4,17 +4,21 @@
 
 👉 BẠN CHỈ CẦN:
 1. Mở phần mềm Trợ lý AI (Google Antigravity, Claude Code, Cursor, hoặc ChatGPT).
-2. Mở thư mục dự án "blogger-auto-cloud" này.
-3. Sao chép toàn bộ đoạn văn bản bên dưới và dán vào khung chat của Trợ lý AI:
+2. Mở thư mục dự án này (File ➔ Open Folder).
+3. Sao chép toàn bộ đoạn văn bản bên dưới và dán vào khung chat của Trợ lý AI (Ctrl + L):
 
 -------------------------- [ SAO CHÉP TỪ ĐÂY ] --------------------------
 
-Xin chào Trợ lý AI! Tôi muốn cài đặt hệ thống Blogger Auto Cloud. 
-Tôi không rành kỹ thuật. Hãy đọc file QUY_TRINH_TRO_LY_AI.md và hướng dẫn tôi lấy từng thông số một theo đúng nguyên tắc "cầm tay chỉ việc, 1 bước 1 câu hỏi". 
-Cứ mỗi bước bạn hướng dẫn tôi lấy 1 thông số, tôi gửi cho bạn, bạn nhận xong thì tự động tạo file .env, chạy kiểm tra và triển khai (deploy) giúp tôi. 
+Xin chào Trợ lý AI! Tôi muốn cài đặt hệ thống Blogger Auto Cloud cho website của mình.
+Tôi không rành kỹ thuật. Hãy đọc file QUY_TRINH_TRO_LY_AI.md và hướng dẫn tôi theo đúng nguyên tắc "cầm tay chỉ việc, 1 bước 1 câu hỏi":
+1. Đầu tiên hãy hỏi tôi về website của tôi (ngành nghề, tên miền web, Zalo/Hotline liên hệ).
+2. Sau đó hướng dẫn tôi lấy từng thông số một (Blogger ID, Gemini API Key, Google Sheet, Google Cloud OAuth).
+3. Bạn tự động tạo file .env, tự động cập nhật prompt và thông tin thương hiệu trong main.py theo đúng ngành nghề của tôi.
+4. Bạn tự chạy script lấy Refresh Token, kiểm tra kết nối và xuất bản thử nghiệm 1 bài viết lên Blogger cho tôi.
+5. Cuối cùng bạn hỗ trợ tôi đẩy lên GitHub Actions để bot tự chạy 24/7 hoàn toàn miễn phí trọn đời.
 Bây giờ hãy bắt đầu ngay với Bước 1 nhé!
 
 -------------------------- [ HẾT ĐOẠN SAO CHÉP ] --------------------------
 
-Sau khi dán câu lệnh trên, Trợ lý AI sẽ chào bạn và hướng dẫn bạn từng click chuột cực kỳ nhẹ nhàng!
+Sau khi dán câu lệnh trên, Trợ lý AI sẽ chào bạn và tự động đồng hành cùng bạn từ A đến Z!
 ================================================================================
