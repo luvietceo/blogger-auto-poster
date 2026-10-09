@@ -2,9 +2,9 @@ name: 🚀 Blogger Gemini AI Auto-Poster Cloud
 
 on:
   schedule:
-    # Tự động chạy định kỳ mỗi 20 phút một lần (chu kỳ 20 phút / bài)
-    # Tự động lấy đề tài tiếp theo từ Google Sheets và lên lịch vào 3 khung giờ vàng (06:30, 11:30, 14:30)
-    - cron: '*/20 * * * *'
+    # Tự động chạy định kỳ mỗi ngày vào 23:00 UTC (06:00 sáng Giờ Việt Nam)
+    # Tự động lấy đề tài tiếp theo từ Google Sheets và lên lịch trải đều vào 4 khung giờ vàng (07:00, 11:00, 15:00, 19:00)
+    - cron: '0 23 * * *'
 
   # Cho phép bấm nút "Run workflow" để chạy thủ công bất kỳ lúc nào trên web GitHub
   workflow_dispatch:
@@ -12,16 +12,17 @@ on:
       posts_count:
         description: 'Số lượng bài viết muốn tạo & lên lịch'
         required: true
-        default: '1'
+        default: '10'
         type: choice
         options:
+          - '10'
+          - '4'
           - '1'
           - '2'
-          - '3'
           - '6'
-          - '9'
+          - '20'
       post_mode:
-        description: 'Chế độ phát hành'
+        description: 'Chế độ phát hành (schedule = Lên lịch 07h, 11h, 15h, 19h)'
         required: true
         default: 'schedule'
         type: choice
@@ -74,8 +75,9 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN || '8480459173:AAHhSTEGSCG5zwq1jp6Dtycw97NQ2dqA8QM' }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '-5074952407' }}
           POST_MODE: ${{ github.event.inputs.post_mode || vars.POST_MODE || 'schedule' }}
-          POSTS_COUNT: ${{ github.event.inputs.posts_count || vars.POSTS_COUNT || '1' }}
+          POSTS_COUNT: ${{ github.event.inputs.posts_count || vars.POSTS_COUNT || '10' }}
           DELAY_SECONDS: ${{ github.event.inputs.delay_seconds || vars.DELAY_SECONDS || '15' }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           INDEXING_SERVICE_ACCOUNT_JSON: ${{ secrets.INDEXING_SERVICE_ACCOUNT_JSON || '' }}
         run: |
           python main.py

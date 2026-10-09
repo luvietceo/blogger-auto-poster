@@ -88,36 +88,29 @@ SCHEDULE_HOURS_AHEAD = int(os.environ.get('SCHEDULE_HOURS_AHEAD', '24'))
 
 def determine_label(title, summary='', raw_tags=''):
     """
-    Phân loại nhãn chuẩn theo quy ước hiển thị của LuViet:
-    - dich-vu: Bài về dịch vụ thiết kế web, landing page doanh nghiệp, báo giá, Đồng Nai/Biên Hòa
-    - tin-tuc: Tin tức thị trường, chiến lược bán hàng, thương mại điện tử
-    - kien-thuc: Hướng dẫn kỹ thuật, tool AI, thủ thuật
+    Phân loại nhãn chuẩn cho web Điện Máy & Gia Dụng:
+    - tin-tuc: Nhãn mặc định tương thích 100% với các widget của theme Blogspot
+    - tu-van-chon-mua: Đánh giá, so sánh, hướng dẫn chọn mua thiết bị
+    - meo-vat: Mẹo sử dụng, vệ sinh, bảo quản, tiết kiệm điện
     """
     combined = (str(title) + ' ' + str(summary) + ' ' + str(raw_tags)).lower()
-    service_keywords = [
-        'dịch vụ', 'dich vu', 'thiết kế web', 'thiet ke web', 'báo giá', 'bảng giá',
-        'thuê đơn vị làm website', 'thiết kế landing page', 'đồng nai', 'biên hòa'
-    ]
-    if any(k in combined for k in service_keywords):
-        return 'dich-vu'
-    knowledge_keywords = [
-        'hướng dẫn', 'huong dan', 'cách làm', 'thủ thuật', 'ai chatbot', 'chatgpt', 'gemini'
-    ]
-    if any(k in combined for k in knowledge_keywords):
-        return 'tin-tuc, kien-thuc'
+    if any(k in combined for k in ['chọn mua', 'chon mua', 'so sánh', 'so sanh', 'đánh giá', 'danh gia', 'top', 'nên mua', 'nen mua', 'review']):
+        return 'tin-tuc, tu-van-chon-mua'
+    if any(k in combined for k in ['mẹo', 'meo', 'vệ sinh', 've sinh', 'tiết kiệm điện', 'tiet kiem dien', 'cách dùng', 'cach dung', 'sửa lỗi', 'sua loi', 'hướng dẫn', 'huong dan']):
+        return 'tin-tuc, meo-vat'
     return 'tin-tuc'
 
-# Cấu hình viết hàng loạt & thời gian giãn cách
-POSTS_COUNT = int(os.environ.get('POSTS_COUNT', os.environ.get('POST_COUNT', '3')))
+# Cấu hình viết hàng loạt & thời gian giãn cách (Mặc định 10 bài/ngày, phát hành 4 bài/ngày)
+POSTS_COUNT = int(os.environ.get('POSTS_COUNT', os.environ.get('POST_COUNT', '10')))
 DELAY_SECONDS = int(os.environ.get('DELAY_SECONDS', '15'))
 
-# Khung giờ vàng phát bài mỗi ngày (Giờ Việt Nam UTC+7: 06:30, 11:30, 14:30)
-GOLDEN_SLOTS = [(6, 30), (11, 30), (14, 30)]
+# Khung giờ vàng phát bài mỗi ngày (Giờ Việt Nam UTC+7: 07:00, 11:00, 15:00, 19:00 - 4 bài/ngày)
+GOLDEN_SLOTS = [(7, 0), (11, 0), (15, 0), (19, 0)]
 
 def get_next_schedule_slots(count=1, existing_history=None):
     """
-    Tính toán danh sách các khung giờ vàng 06:30, 11:30, 14:30 giờ Việt Nam (UTC+7).
-    Tự động nối tiếp các bài đã lên lịch trước đó để không bị trùng slot.
+    Tính toán danh sách các khung giờ vàng 07:00, 11:00, 15:00, 19:00 giờ Việt Nam (UTC+7).
+    Tự động nối tiếp các bài đã lên lịch trước đó để trải đều 4 bài/ngày không trùng slot.
     """
     vn_tz = timezone(timedelta(hours=7))
     now_vn = datetime.now(vn_tz)
@@ -155,12 +148,12 @@ def get_next_schedule_slots(count=1, existing_history=None):
 
     return slots
 
-# Thông tin thương hiệu & Kênh kết nối BNI Topaz Chapter Online
-CTA_URL = os.environ.get('CTA_URL', 'https://www.facebook.com/topazchapteronline')
-WEBSITE_URL = os.environ.get('WEBSITE_URL', 'https://www.bnitopaz.com')
-REGISTER_URL = os.environ.get('REGISTER_URL', CTA_URL)
-ZALO_URL = os.environ.get('ZALO_URL', '')
-FANPAGE_URL = os.environ.get('FANPAGE_URL', CTA_URL)
+# Thông tin thương hiệu & Kênh kết nối Siêu Thị Điện Máy & Thiết Bị Gia Dụng
+WEBSITE_URL = os.environ.get('WEBSITE_URL', os.environ.get('BLOG_URL', 'https://mava.luviet.com/')).strip()
+ZALO_URL = os.environ.get('ZALO_URL', 'https://zalo.me/1501073926693571291').strip()
+FANPAGE_URL = os.environ.get('FANPAGE_URL', 'https://www.facebook.com/webluviet/').strip()
+CTA_URL = os.environ.get('CTA_URL', ZALO_URL or WEBSITE_URL).strip()
+REGISTER_URL = os.environ.get('REGISTER_URL', CTA_URL).strip()
 
 TOPICS_FILE = os.path.join(os.path.dirname(__file__), 'topics.txt')
 HISTORY_FILE = os.path.join(os.path.dirname(__file__), 'posted_history.json')
@@ -263,58 +256,58 @@ def generate_seo_article(topic, labels, summary='', cta_url=REGISTER_URL):
     print(f"🔑 Số lượng API Key trong hồ chứa (Key Pool): {len(api_keys)}")
 
     prompt = f"""
-Bạn là Chuyên gia Cao cấp về Marketing B2B, Referral Networking, Cố vấn Doanh nghiệp và Copywriter hàng đầu Việt Nam, am hiểu tường tận văn hóa và quy trình vận hành của tổ chức BNI (Business Network International).
-Hãy tạo một bài viết chuẩn SEO chuyên sâu, cấu trúc chặt chẽ, tối ưu tỷ lệ chuyển đổi (CRO) bằng tiếng Việt cho website chính thức của BNI Topaz Chapter Online (bnitopaz.com) theo các thông số sau:
+Bạn là Chuyên gia Cố vấn Kỹ thuật, Đánh giá Chuyên sâu & Review Điện Máy, Điện Lạnh và Thiết Bị Gia Dụng Thông Minh hàng đầu Việt Nam.
+Hãy tạo một bài viết chuẩn SEO chuyên sâu, cấu trúc chặt chẽ, khách quan, giàu trải nghiệm thực tế và tối ưu tỷ lệ chuyển đổi (CRO) bằng tiếng Việt cho website Điện máy & Thiết bị Gia dụng ({WEBSITE_URL}) theo các thông số sau:
 
 - Chủ đề / Từ khóa chính: "{topic}"
 - Nhãn chuyên mục mong muốn: "{', '.join(labels)}"
 {f'- Tóm tắt gợi ý / Góc nhìn: "{summary}"' if summary else ''}
-- Liên kết chuyển đổi mục tiêu (BẮT BUỘC): "{cta_url}"
+- Kênh tư vấn & đặt hàng mục tiêu (BẮT BUỘC): "{cta_url}"
+- Website chính thức: "{WEBSITE_URL}"
 - Độ dài mục tiêu: Khoảng 1500 - 2000 từ.
-- Tông giọng: Chuyên gia thực chiến, đĩnh đạc, truyền cảm hứng kinh doanh mạnh mẽ, thấu hiểu sâu sắc những thách thức của chủ doanh nghiệp hiện đại và thôi thúc hành động kết nối giao thương.
+- Tông giọng: Chuyên gia công nghệ & điện máy thực chiến, am hiểu tường tận thông số kỹ thuật, khách quan, chân thành, ngôn từ gần gũi với gia đình Việt, tập trung vào lợi ích thiết thực (tiết kiệm điện năng, độ bền bỉ, an toàn sức khỏe, tiện nghi thông minh).
 
-CHIẾN LƯỢC NỘI DUNG & ĐIỀU HƯỚNG CHUYỂN ĐỔI (QUAN TRỌNG NHẤT):
-1. ĐỐI TƯỢNG VÀ CHÂN DUNG KHÁCH HÀNG MỤC TIÊU:
-   - Bài viết đánh trúng nỗi đau thực tế của: Chủ doanh nghiệp vừa và nhỏ (SMEs), Giám đốc điều hành (CEO / Founder), Trưởng phòng kinh doanh, nhà đầu tư, chủ cơ sở dịch vụ/thương mại và doanh nhân khởi nghiệp.
-   - Nỗi đau:
-     + Bán hàng truyền thống ngày càng khó khăn, chi phí quảng cáo (Facebook/Google/TikTok Ads) đắt đỏ nhưng tỷ lệ chuyển đổi thấp và thiếu sự gắn kết.
-     + Thiếu mạng lưới quan hệ chất lượng, cô đơn trên hành trình quản trị và phát triển doanh nghiệp.
-     + Tham gia các câu lạc bộ truyền thống tốn kém thời gian đi lại, kẹt xe, chi phí ăn uống gặp mặt cao, bị giới hạn phạm vi địa lý hẹp trong một quận/huyện.
-     + Muốn mở rộng quy mô kinh doanh toàn quốc và vươn ra quốc tế nhưng thiếu đối tác và kênh kết nối uy tín.
+CHIẾN LƯỢC NỘI DUNG CHUẨN SEO WEB ĐIỆN MÁY (QUAN TRỌNG NHẤT):
+1. ĐỐI TƯỢNG VÀ NỖI ĐAU CỦA KHÁCH HÀNG:
+   - Đối tượng: Gia đình trẻ, chủ căn hộ/nhà phố, người nội trợ, người tiêu dùng đang tìm mua hoặc cần mẹo sử dụng các thiết bị: Tủ lạnh, Máy giặt, Điều hòa / Máy lạnh, Smart TV, Bếp từ, Nồi chiên không dầu, Máy lọc không khí, Máy lọc nước, Robot hút bụi, Thiết bị nhà bếp thông minh...
+   - Nỗi đau & Nhu cầu:
+     + Băn khoăn không biết nên chọn công suất bao nhiêu (ví dụ chọn sai công suất điều hòa, máy giặt khiến tốn điện hoặc không đủ đáp ứng).
+     + Phân vân giữa các thương hiệu lớn (Panasonic, Daikin, LG, Samsung, Toshiba, Electrolux, Sony, Philips, Sharp, Sunhouse, Kangaroo...).
+     + Nỗi lo tiền điện tăng vọt, muốn tìm sản phẩm công nghệ Inverter, nhãn năng lượng 5 sao thực sự tiết kiệm điện.
+     + Lo sợ mua phải hàng nhái, hàng lỗi trưng bày, chính sách bảo hành phức tạp.
+     + Cần hướng dẫn cách sử dụng, vệ sinh, bảo dưỡng định kỳ để máy bền đẹp 5-10 năm.
 
-2. GIẢI PHÁP ĐỘT PHÁ - BNI TOPAZ CHAPTER ONLINE (bnitopaz.com):
-   - Giới thiệu BNI Topaz Chapter Online là một trong những Chapter trực tuyến kiểu mẫu, năng động và hiệu quả hàng đầu của BNI Việt Nam.
-   - Triết lý kinh doanh đỉnh cao: "Givers Gain®" (Cho là Nhận) – Nuôi dưỡng sự thịnh vượng bằng cách chủ động trao đi giá trị và cơ hội kinh doanh cho đồng đội.
-   - 7 Giá trị Cốt lõi của BNI: Cho là Nhận, Xây dựng mối quan hệ bền vững, Học tập suốt đời, Truyền thống và Đổi mới, Thái độ tích cực, Trách nhiệm và Tinh thần trách nhiệm, Sự công nhận xứng đáng.
-   - Cơ chế Độc quyền Ngành nghề: Mỗi ngành nghề chỉ có DUY NHẤT 1 đại diện trong Chapter, không có cạnh tranh nội bộ, tất cả thành viên trở thành đội ngũ kinh doanh đại sứ giới thiệu khách hàng miễn phí cho nhau.
-   - Lợi thế vượt trội của Chapter Online: Họp định kỳ hàng tuần qua nền tảng Zoom chuyên nghiệp vào sáng sớm; Tiết kiệm 100% thời gian di chuyển; Kết nối không biên giới giữa các doanh nhân khắp 63 tỉnh thành Việt Nam và giao thương quốc tế với các Chapter BNI toàn cầu.
-   - Quy trình tạo Referral chất lượng: Giúp các thành viên liên tục nhận được các cơ hội kinh doanh "nóng" (Referrals) từ những mối quan hệ tin cậy, rút ngắn chu kỳ bán hàng và gia tăng doanh số bền vững.
+2. NỘI DUNG CHUYÊN MÔN & GIẢI PHÁP:
+   - Phân tích chi tiết ưu điểm, công nghệ nổi bật (Inverter, Eco, kháng khuẩn khử mùi, tiết kiệm năng lượng, độ ồn êm ái).
+   - Đưa ra lời khuyên chọn mua thực tế dựa trên diện tích phòng, số lượng thành viên gia đình và ngân sách tài chính.
+   - BẮT BUỘC có 1 BẢNG SO SÁNH (HTML <table>) chi tiết thông số kỹ thuật / giá tham khảo / tính năng / ưu nhược điểm (border: 1px solid #cbd5e1; bo góc nhẹ, nền xen kẽ thoáng mắt).
+   - Hướng dẫn các mẹo sử dụng thực tế giúp tối ưu hóa hiệu năng và kéo dài tuổi thọ thiết bị.
 
-3. ĐIỀU HƯỚNG LIÊN KẾT NỘI BỘ (INTERNAL LINKING - BẮT BUỘC):
-   - Trong thân bài: BẮT BUỘC chèn tự nhiên từ 2 đến 3 liên kết ngữ cảnh (contextual anchor text) dẫn người đọc bấm vào link Fanpage đăng ký: "{cta_url}".
-     Ví dụ các cụm từ chèn link: <a href="{cta_url}" target="_blank">kết nối cùng BNI Topaz Chapter Online</a>, <a href="{cta_url}" target="_blank">đăng ký tham dự buổi giao lưu doanh nhân BNI Topaz</a>, <a href="{cta_url}" target="_blank">tìm hiểu BNI Topaz Chapter</a>.
-   - BẮT BUỘC chèn thêm 1 - 2 liên kết nội bộ tự nhiên đến website chính thức:
-     + Khi nhắc đến website hoặc thông tin Chapter: <a href="https://www.bnitopaz.com" target="_blank">website BNI Topaz Chapter</a> hoặc <a href="https://www.bnitopaz.com" target="_blank">cộng đồng doanh nhân bnitopaz.com</a>.
+3. ĐIỀU HƯỚNG LIÊN KẾT NỘI BỘ (INTERNAL LINKING):
+   - Trong thân bài: Chèn tự nhiên 2 - 3 liên kết ngữ cảnh (contextual anchor text) dẫn người đọc bấm vào kênh tư vấn Zalo / Hotline: "{cta_url}".
+     Ví dụ: <a href="{cta_url}" target="_blank">tư vấn chọn mua điện máy chính hãng</a>, <a href="{cta_url}" target="_blank">nhận báo giá ưu đãi qua Zalo</a>, <a href="{cta_url}" target="_blank">liên hệ kỹ thuật viên hỗ trợ</a>.
+   - Chèn thêm 1 - 2 liên kết tự nhiên đến trang chủ website:
+     Ví dụ: <a href="{WEBSITE_URL}" target="_blank">siêu thị điện máy chính hãng</a> hoặc <a href="{WEBSITE_URL}" target="_blank">hệ thống điện máy mava.luviet.com</a>.
 
-4. KHỐI CALL TO ACTION (CTA) ĐẲNG CẤP Ở CUỐI BÀI:
-   - BẮT BUỘC chèn khối CTA nổi bật dạng hộp bo tròn sang trọng, phối màu nhận diện BNI đẳng cấp (Đỏ Burgundy BNI đặc trưng, Xanh Navy và Vàng Kim):
-     <div style="margin: 35px 0 20px; padding: 28px 24px; background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 50%, #eff6ff 100%); border: 2px solid #dc2626; border-radius: 14px; text-align: center; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.12);">
-       <span style="background: #dc2626; color: #ffffff; font-size: 13px; font-weight: 500; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; letter-spacing: 0.5px;">Cơ Hội Kết Nối Kinh Doanh Độc Quyền</span>
-       <h3 style="color: #991b1b; margin: 15px 0 10px; font-size: 22px; font-weight: 600; line-height: 1.4;">🚀 Bứt Phá Doanh Số & Mở Rộng Quan Hệ Cùng BNI Topaz Chapter Online!</h3>
-       <p style="color: #334155; font-size: 15px; line-height: 1.6; max-width: 1280px; margin: 0 auto 22px;">Đừng để doanh nghiệp đơn độc trong thị trường cạnh tranh khốc liệt. Hãy trải nghiệm năng lượng kết nối kinh doanh đỉnh cao theo triết lý "Cho Là Nhận" (Givers Gain) và sở hữu ngay đội ngũ hàng chục chủ doanh nghiệp sẵn sàng giới thiệu khách hàng cho bạn trên toàn quốc!</p>
+4. KHỐI CALL TO ACTION (CTA) CHUYÊN NGHIỆP CHO WEB ĐIỆN MÁY:
+   - BẮT BUỘC chèn khối CTA nổi bật dạng hộp bo tròn sang trọng, phối màu nhận diện công nghệ điện máy (Xanh Dương #2563eb, Xanh Navy #1e3a8a và Cam Vàng #f59e0b):
+     <div style="margin: 35px 0 20px; padding: 28px 24px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #fef3c7 100%); border: 2px solid #0284c7; border-radius: 14px; text-align: center; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.15);">
+       <span style="background: #0284c7; color: #ffffff; font-size: 13px; font-weight: 600; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; letter-spacing: 0.5px;">Tư Vấn Chuyên Sâu & Báo Giá Tốt Nhất</span>
+       <h3 style="color: #0369a1; margin: 15px 0 10px; font-size: 22px; font-weight: 700; line-height: 1.4;">⚡ Cần Tư Vấn Chọn Thiết Bị Điện Máy Phù Hợp Cho Gia Đình?</h3>
+       <p style="color: #334155; font-size: 15px; line-height: 1.6; max-width: 1280px; margin: 0 auto 22px;">Đừng ngần ngại liên hệ ngay với đội ngũ kỹ thuật viên của chúng tôi để được tư vấn công suất chuẩn xác, so sánh các model tối ưu ngân sách, cam kết 100% hàng chính hãng cùng chính sách bảo hành, lắp đặt tận nơi chuyên nghiệp!</p>
        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
-         <a href="{cta_url}" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: #ffffff; font-weight: 500; font-size: 16px; padding: 13px 30px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35); display: inline-block;">👉 Đăng Ký Tham Dự Giao Lưu BNI Topaz (Miễn Phí)</a>
-         <a href="{cta_url}" target="_blank" rel="noopener" style="background: #1e3a8a; color: #ffffff; font-weight: 500; font-size: 15px; padding: 13px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25); display: inline-block;">💬 Nhắn Tin Fanpage BNI Topaz Chapter</a>
+         <a href="{cta_url}" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-weight: 600; font-size: 16px; padding: 13px 30px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); display: inline-block;">💬 Chat Zalo Nhận Báo Giá Ưu Đãi & Tư Vấn Kỹ Thuật</a>
+         <a href="{WEBSITE_URL}" target="_blank" rel="noopener" style="background: #1e293b; color: #ffffff; font-weight: 600; font-size: 15px; padding: 13px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25); display: inline-block;">🏠 Xem Thêm Sản Phẩm Tại Website</a>
        </div>
      </div>
 
 5. CẤU TRÚC BÀI VIẾT (BẮT BUỘC):
-   - TIÊU ĐỀ (Title): BẮT BUỘC đặt TỪ KHÓA CHÍNH NGAY Ở ĐẦU TIÊU ĐỀ (dưới 60 ký tự) để Blogger tự động sinh URL slug chuẩn SEO mà không bị cắt cụt. Kích thích lượt click (CTR) cao.
-   - SAPO: Mở bài cuốn hút 2-3 đoạn ngắn theo công thức PAS (Problem - Agitate - Solution).
+   - TIÊU ĐỀ (Title): BẮT BUỘC đặt TỪ KHÓA CHÍNH NGAY Ở ĐẦU TIÊU ĐỀ (dưới 65 ký tự) để Blogger tự động sinh URL slug chuẩn SEO mà không bị cắt cụt. Kích thích lượt click (CTR) cao.
+   - SAPO: Mở bài cuốn hút 2-3 đoạn ngắn nêu bật lợi ích và lý do người dùng cần đọc bài viết này.
    - THÂN BÀI: Sử dụng thẻ <h2> và <h3> rõ ràng, logic. Luôn dùng danh sách (<ul>, <li>) để thoáng mắt.
-   - BẢNG BIỂU: BẮT BUỘC có 1 Bảng so sánh (HTML <table>) trực quan, viền mỏng chuyên nghiệp (border: 1px solid #cbd5e1) làm nổi bật sự vượt trội của BNI Topaz Online so với các phương thức kinh doanh hoặc kết nối truyền thống.
-   - FAQ: BẮT BUỘC có mục <h2>Câu hỏi thường gặp (FAQ)</h2> với ít nhất 3 câu hỏi thực tế về BNI Topaz Chapter Online và câu trả lời thấu đáo.
-   - PROMPT TẠO ẢNH (imagePrompt): Viết 1 đoạn Prompt tiếng Anh chi tiết, chuyên nghiệp để tạo ảnh Thumbnail 16:9 chất lượng cao bám sát nội dung chủ đề bài viết. Cấu trúc chuẩn: [Phong cách nhiếp ảnh chân thực hoặc 3D hiện đại] + [Chủ thể chính mô tả trực quan chủ đề bài viết] + [Bối cảnh không gian thực tế, chuyên nghiệp] + [Ánh sáng điện ảnh/tự nhiên, bố cục 16:9 cinematic thoáng đẹp] + [Tham số loại trừ: absolutely no text, no letters, no watermark, no logo, photorealistic 8k].
+   - BẢNG BIỂU: BẮT BUỘC có 1 Bảng so sánh thông số kỹ thuật (HTML <table>) rõ ràng, viền mỏng (#cbd5e1).
+   - FAQ: BẮT BUỘC có mục <h2>Câu hỏi thường gặp (FAQ)</h2> với ít nhất 3 câu hỏi thực tế về cách chọn mua, bảo hành, sử dụng thiết bị điện máy và câu trả lời cặn kẽ.
+   - PROMPT TẠO ẢNH (imagePrompt): Viết 1 đoạn Prompt tiếng Anh chi tiết, chuyên nghiệp để tạo ảnh Thumbnail 16:9 chất lượng cao bám sát chủ đề thiết bị điện máy trong không gian nội thất gia đình hiện đại, sang trọng. Cấu trúc chuẩn: [Modern cinematic photorealistic product shot of household home appliances] + [Specific appliance details related to topic] + [Luxurious minimalist living room or modern kitchen background] + [Soft natural morning sunlight, 16:9 widescreen composition] + [Negative constraints: absolutely no text, no watermark, no logos, photorealistic 8k].
 
 ĐỊNH DẠNG TRẢ VỀ:
 Hãy trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm theo bất kỳ văn bản giải thích nào ngoài JSON) theo cấu trúc:
@@ -322,7 +315,7 @@ Hãy trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm theo bất
   "title": "Tiêu đề bài viết dưới 65 ký tự",
   "labels": ["Nhãn 1", "Nhãn 2"],
   "metaDescription": "Mô tả tìm kiếm tóm tắt dưới 155 ký tự chuẩn SEO",
-  "imagePrompt": "Detailed English prompt for high-resolution 16:9 cinematic thumbnail directly representing the article topic, photorealistic lighting, modern composition, no text overlay, 8k quality...",
+  "imagePrompt": "Detailed English prompt for high-resolution 16:9 cinematic thumbnail directly representing the home appliance topic, photorealistic lighting, modern composition, no text overlay, 8k quality...",
   "content": "<div class='seo-post-content'><p>...</p><h2>...</h2>...</div>"
 }}
 """
@@ -741,7 +734,8 @@ def send_telegram_notification(topic, status_text, post_url, published_time, lab
             text += f"📊 <b>Google Sheet:</b> Đã cập nhật dòng #{row_index} (<b>{status_text}</b>)\n"
         if post_url:
             text += f"🔗 <b>Link bài viết:</b> <a href=\"{post_url}\">Bấm xem bài viết ngay</a>\n"
-        text += "\n💡 <i>Hệ thống AI Blogger Cloud BNI Topaz Chapter Online đã lên lịch/xuất bản hoàn tất!</i>"
+        text += "\n💡 <i>Hệ thống AI Blogger Cloud Siêu Thị Điện Máy & Gia Dụng đã lên lịch/xuất bản hoàn tất!</i>"
+
 
         payload = {
             "chat_id": TELEGRAM_CHAT_ID,
