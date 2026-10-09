@@ -1,0 +1,59 @@
+================================================================================
+   ☁️ HƯỚNG DẪN BẮT ĐẦU NHANH (BẬT ĐÂY ĐẦU TIÊN)
+   Blogger Gemini AI Cloud Auto-Poster - Bản Đóng Gói Trọn Gói 2026
+================================================================================
+
+Xin chào! Đây là bộ công cụ tự động hóa viết bài chuẩn SEO và đăng lên Blogger.com.
+Bạn có thể chọn 1 trong 2 cách cài đặt cực kỳ đơn giản dưới đây:
+
+--------------------------------------------------------------------------------
+🤖 CÁCH 1: DÙNG TRỢ LÝ AI (ANTIGRAVITY / CLAUDE / CODEX) - [KHUYÊN DÙNG SỐ 1]
+--------------------------------------------------------------------------------
+Nếu bạn đang dùng Google Antigravity, Claude Code, Cursor hoặc ChatGPT:
+👉 Bạn không cần biết kỹ thuật! Trợ lý AI sẽ "cầm tay chỉ việc", hướng dẫn bạn 
+   lấy từng API/Token một, rồi AI tự tạo file cấu hình và triển khai giúp bạn:
+
+1. Mở file: 👉👉👉 PROMPT_KHOI_DONG_AI.txt 👈👈👈
+2. Sao chép đoạn văn bản bên trong và dán vào khung chat của Trợ lý AI.
+3. AI sẽ hướng dẫn bạn lấy từng thông số (Blogger ID, Gemini Key, Google Sheets, OAuth) 
+   rồi tự động tạo .env, chạy kiểm tra và đăng bài thử nghiệm cho bạn!
+(Xem cẩm nang chi tiết cho người mới tại: HUONG_DAN_LAM_VIEC_VOI_TRO_LY_AI.md).
+
+--------------------------------------------------------------------------------
+🖥️ CÁCH 2: CÀI ĐẶT TỰ ĐỘNG BẰNG FILE .BAT (TRÊN MÁY TÍNH WINDOWS)
+--------------------------------------------------------------------------------
+Nếu bạn muốn tự thao tác trên máy tính bằng file kịch bản có sẵn:
+1. Bấm đúp chuột (Double Click) vào file:
+       👉👉👉  CAI_DAT.bat  👈👈👈
+   (Hệ thống tự động kiểm tra Python, cài thư viện và mở Setup Wizard tiếng Việt).
+   * LƯU Ý KHI CÀI PYTHON: Nhớ tích chọn ô [v] "Add python.exe to PATH".
+
+2. Sau khi cài xong, bấm đúp vào:
+       👉👉👉  MENU_CHINH.bat  👈👈👈
+   (Menu quản trị trung tâm: Kiểm tra kết nối, đăng bài thử, xem lịch sử).
+
+--------------------------------------------------------------------------------
+☁️ ĐƯA LÊN ĐÁM MÂY GITHUB ACTIONS CHẠY 24/7 (KHÔNG CẦN BẬT MÁY TÍNH)
+--------------------------------------------------------------------------------
+Mở file tài liệu duy nhất trên trình duyệt web:
+       👉👉👉  HUONG_DAN_CAI_DAT.html  👈👈👈
+(Giao diện trực quan, bảng checklist 10 bước, hướng dẫn cài GitHub Secrets 24/7 miễn phí).
+
+--------------------------------------------------------------------------------
+📁 DANH SÁCH CÁC FILE CHÍNH CẦN BIẾT:
+--------------------------------------------------------------------------------
+- PROMPT_KHOI_DONG_AI.txt            : Câu lệnh 1-click kích hoạt Trợ lý AI đồng hành.
+- HUONG_DAN_LAM_VIEC_VOI_TRO_LY_AI.md: Cẩm nang hướng dẫn người mới làm việc với AI từ A-Z.
+- QUY_TRINH_TRO_LY_AI.md             : Quy trình chuẩn 8 bước cho AI (Antigravity/Claude/Codex).
+- HUONG_DAN_CAI_DAT.html  : Cẩm nang trực quan duy nhất mở trên trình duyệt web.
+- CAI_DAT.bat             : Bộ cài đặt môi trường tự động cho máy tính Windows.
+- MENU_CHINH.bat          : Menu quản trị trung tâm (Cài đặt, test, đăng bài, lịch sử).
+- CHAY_DANG_BAI.bat       : 1-Click xuất bản bài viết lên Blogger ngay lập tức.
+- KIEM_TRA_KET_NOI.bat    : Kiểm tra xem các API Gemini, Blogger, Sheets đã thông chưa.
+- LAY_REFRESH_TOKEN.bat   : Lấy mã ủy quyền đăng bài Blogger.
+- DONG_GOI_FILE_ZIP.bat   : Tự động nén bộ cài sạch ra file ZIP an toàn để chia sẻ.
+- topics.txt              : Danh sách đề tài dự phòng khi không dùng Google Sheets.
+- posted_history.json     : Lịch sử lưu trữ các bài đã đăng (chống trùng lặp).
+
+Chúc bạn xây dựng hệ thống Blogger tự động triệu view thành công rực rỡ!
+================================================================================

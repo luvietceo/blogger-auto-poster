@@ -1,0 +1,20 @@
+================================================================================
+🤖 CÂU LỆNH 1-CLICK KÍCH HOẠT TRỢ LÝ AI (ANTIGRAVITY / CLAUDE / CODEX / CURSOR)
+================================================================================
+
+👉 BẠN CHỈ CẦN:
+1. Mở phần mềm Trợ lý AI (Google Antigravity, Claude Code, Cursor, hoặc ChatGPT).
+2. Mở thư mục dự án "blogger-auto-cloud" này.
+3. Sao chép toàn bộ đoạn văn bản bên dưới và dán vào khung chat của Trợ lý AI:
+
+-------------------------- [ SAO CHÉP TỪ ĐÂY ] --------------------------
+
+Xin chào Trợ lý AI! Tôi muốn cài đặt hệ thống Blogger Auto Cloud. 
+Tôi không rành kỹ thuật. Hãy đọc file QUY_TRINH_TRO_LY_AI.md và hướng dẫn tôi lấy từng thông số một theo đúng nguyên tắc "cầm tay chỉ việc, 1 bước 1 câu hỏi". 
+Cứ mỗi bước bạn hướng dẫn tôi lấy 1 thông số, tôi gửi cho bạn, bạn nhận xong thì tự động tạo file .env, chạy kiểm tra và triển khai (deploy) giúp tôi. 
+Bây giờ hãy bắt đầu ngay với Bước 1 nhé!
+
+-------------------------- [ HẾT ĐOẠN SAO CHÉP ] --------------------------
+
+Sau khi dán câu lệnh trên, Trợ lý AI sẽ chào bạn và hướng dẫn bạn từng click chuột cực kỳ nhẹ nhàng!
+================================================================================

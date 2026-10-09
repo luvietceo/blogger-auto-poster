@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+client_secrets*.json
+*service_account*.json
+token.json
+token.pickle
+credentials.json
+*.log
+.DS_Store
+.vscode/
+venv/
+.venv/
+
+# Private templates & personal data files (Bảo mật tuyệt đối)
+*.xml
+*.xlsx
+*BNI*
+*LuViet*
+Ke_Hoach_Dang_Bai.csv
+sample_bg.jpg
+create_excel_plan.py
+*.zip
+
+*.bak
