@@ -523,10 +523,15 @@ def post_to_blogger(service, article, original_labels, scheduled_slot=None):
 
     print(f"🏷️ Danh sách nhãn (Labels) gắn cho bài viết Blogger: {post_labels}")
 
+    # Tự động bọc [tintuc]...[/tintuc] để tương thích 100% với giao diện theme Blogspot
+    post_content = article['content']
+    if '[tintuc]' not in post_content:
+        post_content = f"[tintuc]{post_content}[/tintuc]"
+
     post_body = {
         'kind': 'blogger#post',
         'title': article['title'],
-        'content': article['content'],
+        'content': post_content,
         'labels': post_labels
     }
 
